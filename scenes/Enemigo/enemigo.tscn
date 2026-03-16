@@ -1,0 +1,92 @@
+[gd_scene load_steps=14 format=3 uid="uid://byaugw6ercdg1"]
+
+[ext_resource type="Script" uid="uid://cnska6k8w7f86" path="res://scripts/Enemigo/Enemigo.cs" id="1_7h2r5"]
+[ext_resource type="Texture2D" uid="uid://c8i8k4rquvvd" path="res://assets/Barco-Sheet.png" id="2_5cx2t"]
+[ext_resource type="Script" uid="uid://deile0bv7ogsu" path="res://scripts/Jugador/Flotador.cs" id="2_upvfi"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_upvfi"]
+atlas = ExtResource("2_5cx2t")
+region = Rect2(0, 0, 96, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nuf76"]
+atlas = ExtResource("2_5cx2t")
+region = Rect2(96, 0, 96, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l0i56"]
+atlas = ExtResource("2_5cx2t")
+region = Rect2(192, 0, 96, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q710g"]
+atlas = ExtResource("2_5cx2t")
+region = Rect2(288, 0, 96, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fmd1a"]
+atlas = ExtResource("2_5cx2t")
+region = Rect2(384, 0, 96, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u544h"]
+atlas = ExtResource("2_5cx2t")
+region = Rect2(480, 0, 96, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sqmq2"]
+atlas = ExtResource("2_5cx2t")
+region = Rect2(576, 0, 96, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2vl41"]
+atlas = ExtResource("2_5cx2t")
+region = Rect2(672, 0, 96, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_eqivx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_upvfi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nuf76")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l0i56")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q710g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fmd1a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u544h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sqmq2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2vl41")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5cx2t"]
+size = Vector2(31.39671, 34.67514)
+
+[node name="Enemigo" type="CharacterBody2D"]
+collision_layer = 2
+script = ExtResource("1_7h2r5")
+
+[node name="Node" type="Node" parent="."]
+script = ExtResource("2_upvfi")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(0.675, 0.675)
+sprite_frames = SubResource("SpriteFrames_eqivx")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, 0.9999999)
+scale = Vector2(1.4651217, 0.6344603)
+shape = SubResource("RectangleShape2D_5cx2t")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+rect = Rect2(-24, -10, 45, 22)

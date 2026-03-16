@@ -1,0 +1,95 @@
+[gd_scene load_steps=15 format=3 uid="uid://cg8k18i4f2mid"]
+
+[ext_resource type="Script" uid="uid://bu0xcihon0x63" path="res://scripts/Jugador/Jugador.cs" id="1_qi77d"]
+[ext_resource type="PackedScene" uid="uid://chun08437m4i1" path="res://scenes/Proyectiles/proyectil.tscn" id="2_pxqnj"]
+[ext_resource type="Script" uid="uid://deile0bv7ogsu" path="res://scripts/Jugador/Flotador.cs" id="3_3xsj2"]
+[ext_resource type="Texture2D" uid="uid://c8i8k4rquvvd" path="res://assets/Barco-Sheet.png" id="3_aoduk"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3xsj2"]
+atlas = ExtResource("3_aoduk")
+region = Rect2(0, 0, 96, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q3akq"]
+atlas = ExtResource("3_aoduk")
+region = Rect2(96, 0, 96, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xppm3"]
+atlas = ExtResource("3_aoduk")
+region = Rect2(192, 0, 96, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r4t7w"]
+atlas = ExtResource("3_aoduk")
+region = Rect2(288, 0, 96, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j00up"]
+atlas = ExtResource("3_aoduk")
+region = Rect2(384, 0, 96, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dte2m"]
+atlas = ExtResource("3_aoduk")
+region = Rect2(480, 0, 96, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tk5hs"]
+atlas = ExtResource("3_aoduk")
+region = Rect2(576, 0, 96, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oobq5"]
+atlas = ExtResource("3_aoduk")
+region = Rect2(672, 0, 96, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_13s4b"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3xsj2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q3akq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xppm3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r4t7w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j00up")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dte2m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tk5hs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oobq5")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_3xsj2"]
+
+[node name="Jugador" type="Node2D"]
+texture_filter = 1
+script = ExtResource("1_qi77d")
+EscenaProyectil = ExtResource("2_pxqnj")
+
+[node name="Flotador" type="Node" parent="."]
+script = ExtResource("3_3xsj2")
+
+[node name="Jugador" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_13s4b")
+
+[node name="PivoteCañon" type="Node2D" parent="."]
+position = Vector2(16, -5)
+
+[node name="PuntoDisparo" type="Marker2D" parent="PivoteCañon"]
+position = Vector2(-1, 1)
+
+[node name="Cañon" type="Sprite2D" parent="PivoteCañon"]
+position = Vector2(9.536743e-07, 2.3841858e-07)
+scale = Vector2(17.5, 6.999999)
+texture = SubResource("PlaceholderTexture2D_3xsj2")
+offset = Vector2(0.4714285, -0.07142854)
