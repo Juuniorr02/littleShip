@@ -1,9 +1,12 @@
-[gd_scene load_steps=15 format=3 uid="uid://cg8k18i4f2mid"]
+[gd_scene load_steps=16 format=3 uid="uid://cg8k18i4f2mid"]
 
 [ext_resource type="Script" uid="uid://bu0xcihon0x63" path="res://scripts/Jugador/Jugador.cs" id="1_qi77d"]
 [ext_resource type="PackedScene" uid="uid://chun08437m4i1" path="res://scenes/Proyectiles/proyectil.tscn" id="2_pxqnj"]
 [ext_resource type="Script" uid="uid://deile0bv7ogsu" path="res://scripts/Jugador/Flotador.cs" id="3_3xsj2"]
 [ext_resource type="Texture2D" uid="uid://c8i8k4rquvvd" path="res://assets/Barco-Sheet.png" id="3_aoduk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3xsj2"]
+size = Vector2(65, 20)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3xsj2"]
 atlas = ExtResource("3_aoduk")
@@ -75,6 +78,11 @@ animations = [{
 texture_filter = 1
 script = ExtResource("1_qi77d")
 EscenaProyectil = ExtResource("2_pxqnj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_index = 1
+position = Vector2(-2.5, 5)
+shape = SubResource("RectangleShape2D_3xsj2")
 
 [node name="Flotador" type="Node" parent="."]
 script = ExtResource("3_3xsj2")

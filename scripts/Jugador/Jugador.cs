@@ -11,6 +11,8 @@ public partial class Jugador : Node2D
 
     private float _currentCharge = 0f;
     private bool _isCharging = false;
+
+    private int health = 100;
     
     private Node2D _pivoteCañon;
     private Marker2D _puntoDisparo;
@@ -59,5 +61,24 @@ public partial class Jugador : Node2D
         // Aplicamos el impulso inicial (Linear Velocity)
         // Usamos GlobalTransform.X para que salga hacia donde apunta el cañón
         bala.ApplyImpulse(_pivoteCañon.GlobalTransform.X * finalForce);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+        GD.Print($"Jugador recibió {damage} de daño. Salud restante: {health}");
+
+        if (health <= 0)
+        {
+            GD.Print("¡Jugador ha sido destruido!");
+            // Aquí podrías agregar lógica de muerte, reinicio, etc.
+             QueueFree(); // El jugador se destruye al quedarse sin salud
+             GetTree().ChangeSceneToFile("res://scenes/ui/menu_muerte.tscn"); // Volver al menú principal
+        }
+    }
+
+    public int GetHealth()
+    {
+        return health;
     }
 }

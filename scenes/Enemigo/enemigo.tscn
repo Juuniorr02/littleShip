@@ -72,7 +72,7 @@ animations = [{
 size = Vector2(31.39671, 34.67514)
 
 [node name="Enemigo" type="CharacterBody2D"]
-collision_layer = 2
+collision_layer = 3
 script = ExtResource("1_7h2r5")
 
 [node name="Node" type="Node" parent="."]
