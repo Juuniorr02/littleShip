@@ -1,11 +1,16 @@
-[gd_scene load_steps=7 format=3 uid="uid://bhsg85hhkib8o"]
+[gd_scene load_steps=9 format=3 uid="uid://bhsg85hhkib8o"]
 
 [ext_resource type="Script" uid="uid://bxq6evuncwo64" path="res://scripts/MarInfinito.cs" id="1_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://cg8k18i4f2mid" path="res://scenes/Jugador/jugador.tscn" id="1_o5qli"]
 [ext_resource type="Script" uid="uid://e2kgwidhv85a" path="res://scripts/Enemigo/Spawner.cs" id="2_sugp2"]
 [ext_resource type="PackedScene" uid="uid://byaugw6ercdg1" path="res://scenes/Enemigo/enemigo.tscn" id="3_jyhfs"]
-[ext_resource type="PackedScene" uid="uid://ci612q8twcycd" path="res://scenes/UI/iu.tscn" id="5_tbgi4"]
-[ext_resource type="PackedScene" uid="uid://cv0706nbbb2kk" path="res://scenes/UI/menu_pausa.tscn" id="6_tefeu"]
+[ext_resource type="Shader" uid="uid://c8i5y0rvkaywi" path="res://assets/shaders/mar.gdshader" id="3_o6xl0"]
+[ext_resource type="PackedScene" uid="uid://ci612q8twcycd" path="res://scenes/ui/iu.tscn" id="5_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://cv0706nbbb2kk" path="res://scenes/ui/menu_pausa.tscn" id="6_tefeu"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tipki"]
+render_priority = 0
+shader = ExtResource("3_o6xl0")
 
 [node name="Main" type="Node2D"]
 
@@ -22,6 +27,7 @@ script = ExtResource("1_0wfyh")
 
 [node name="ColorRect" type="ColorRect" parent="Parallax2D"]
 z_index = 2
+material = SubResource("ShaderMaterial_tipki")
 offset_top = 510.0
 offset_right = 1152.0
 offset_bottom = 530.25
