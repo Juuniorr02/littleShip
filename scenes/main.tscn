@@ -18,6 +18,7 @@ offset_top = 510.0
 offset_right = 1152.0
 offset_bottom = 530.25
 scale = Vector2(1, 6.8000026)
+color = Color(0.2509804, 1, 1, 0.32156864)
 
 [node name="Spawner" type="Node2D" parent="."]
 script = ExtResource("2_sugp2")
