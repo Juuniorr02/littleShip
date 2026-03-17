@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class Jugador : Node2D
+public partial class Jugador : CharacterBody2D
 {
     [Export] public PackedScene EscenaProyectil;
     
@@ -63,10 +63,23 @@ public partial class Jugador : Node2D
         bala.ApplyImpulse(_pivoteCañon.GlobalTransform.X * finalForce);
     }
 
-    public void TakeDamage(int damage)
+    private void OnArea2DBodyEntered(Node body)
+    {
+        GD.Print("Algo entró en el área");
+
+    // Opción 1: comprobar por grupo (RECOMENDADO)
+        if (body.IsInGroup("enemigos"))
+        {
+            GD.Print("Es un enemigo!");
+            TakeDamage(10, (Enemigo)body);
+        }
+    }
+
+    public void TakeDamage(int damage, Enemigo enemigo)
     {
         health -= damage;
         GD.Print($"Jugador recibió {damage} de daño. Salud restante: {health}");
+        enemigo.RecibirDmg(1);
 
         if (health <= 0)
         {

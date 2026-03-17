@@ -5,12 +5,10 @@ using System.Threading.Tasks;
 public partial class Enemigo : CharacterBody2D
 {
     [Export] public float Velocidad = 100f;
-    [Export] public int Vida = 2;
+    [Export] public int Vida = 1;
     
     private bool _estaHundiendose = false;
     private float _velocidadHundimiento = 40f;
-
-    private int damage = 1;
 
     public override void _Process(double delta)
     {
@@ -52,15 +50,5 @@ public partial class Enemigo : CharacterBody2D
         // Esperamos 2.5 segundos de "animación" de hundido antes de borrarlo
         await Task.Delay(2500);
         QueueFree();
-    }
-
-    private void OnBodyEntered(Node2D body)
-    {
-        if (body is Jugador jugador)
-        {
-            jugador.TakeDamage(damage);
-            RecibirDmg(Vida);
-            QueueFree();
-        }
     }
 }

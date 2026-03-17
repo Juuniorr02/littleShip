@@ -1,12 +1,15 @@
-[gd_scene load_steps=16 format=3 uid="uid://cg8k18i4f2mid"]
+[gd_scene load_steps=17 format=3 uid="uid://cg8k18i4f2mid"]
 
 [ext_resource type="Script" uid="uid://bu0xcihon0x63" path="res://scripts/Jugador/Jugador.cs" id="1_qi77d"]
-[ext_resource type="PackedScene" uid="uid://chun08437m4i1" path="res://scenes/Proyectiles/proyectil.tscn" id="2_pxqnj"]
+[ext_resource type="PackedScene" uid="uid://chun08437m4i1" path="res://scenes/Proyectiles/proyectil.tscn" id="2_3xsj2"]
 [ext_resource type="Script" uid="uid://deile0bv7ogsu" path="res://scripts/Jugador/Flotador.cs" id="3_3xsj2"]
 [ext_resource type="Texture2D" uid="uid://c8i8k4rquvvd" path="res://assets/Barco-Sheet.png" id="3_aoduk"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q3akq"]
+size = Vector2(65, 26)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3xsj2"]
-size = Vector2(65, 20)
+size = Vector2(65, 26)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3xsj2"]
 atlas = ExtResource("3_aoduk")
@@ -40,7 +43,7 @@ region = Rect2(576, 0, 96, 64)
 atlas = ExtResource("3_aoduk")
 region = Rect2(672, 0, 96, 64)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_13s4b"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_q3akq"]
 animations = [{
 "frames": [{
 "duration": 1.0,
@@ -72,23 +75,32 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_3xsj2"]
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_xppm3"]
 
-[node name="Jugador" type="Node2D"]
-texture_filter = 1
+[node name="Jugador" type="CharacterBody2D"]
+light_mask = 3
+visibility_layer = 3
 script = ExtResource("1_qi77d")
-EscenaProyectil = ExtResource("2_pxqnj")
+EscenaProyectil = ExtResource("2_3xsj2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-z_index = 1
-position = Vector2(-2.5, 5)
+position = Vector2(-2.5, 3)
+shape = SubResource("RectangleShape2D_q3akq")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(-2.5, 3)
 shape = SubResource("RectangleShape2D_3xsj2")
 
 [node name="Flotador" type="Node" parent="."]
 script = ExtResource("3_3xsj2")
 
 [node name="Jugador" type="AnimatedSprite2D" parent="."]
-sprite_frames = SubResource("SpriteFrames_13s4b")
+light_mask = 3
+visibility_layer = 3
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_q3akq")
 
 [node name="PivoteCañon" type="Node2D" parent="."]
 position = Vector2(16, -5)
@@ -99,5 +111,5 @@ position = Vector2(-1, 1)
 [node name="Cañon" type="Sprite2D" parent="PivoteCañon"]
 position = Vector2(9.536743e-07, 2.3841858e-07)
 scale = Vector2(17.5, 6.999999)
-texture = SubResource("PlaceholderTexture2D_3xsj2")
+texture = SubResource("PlaceholderTexture2D_xppm3")
 offset = Vector2(0.4714285, -0.07142854)

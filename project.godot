@@ -30,6 +30,11 @@ folder_colors={
 "res://scripts/": "red"
 }
 
+[global_group]
+
+Jugador=""
+enemigos=""
+
 [input]
 
 disparar={

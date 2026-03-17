@@ -4,8 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://cg8k18i4f2mid" path="res://scenes/Jugador/jugador.tscn" id="1_o5qli"]
 [ext_resource type="Script" uid="uid://e2kgwidhv85a" path="res://scripts/Enemigo/Spawner.cs" id="2_sugp2"]
 [ext_resource type="PackedScene" uid="uid://byaugw6ercdg1" path="res://scenes/Enemigo/enemigo.tscn" id="3_jyhfs"]
-[ext_resource type="PackedScene" uid="uid://ci612q8twcycd" path="res://scenes/UI/iu.tscn" id="5_tbgi4"]
-[ext_resource type="PackedScene" uid="uid://cv0706nbbb2kk" path="res://scenes/UI/menu_pausa.tscn" id="6_tefeu"]
+[ext_resource type="PackedScene" uid="uid://ci612q8twcycd" path="res://scenes/ui/iu.tscn" id="5_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://cv0706nbbb2kk" path="res://scenes/ui/menu_pausa.tscn" id="6_tefeu"]
 
 [node name="Main" type="Node2D"]
 
@@ -35,6 +35,8 @@ EscenaEnemigo = ExtResource("3_jyhfs")
 wait_time = 0.05
 
 [node name="Jugador" parent="." instance=ExtResource("1_o5qli")]
+light_mask = 1
+visibility_layer = 1
 position = Vector2(86, 497)
 
 [node name="menu_pausa" parent="." instance=ExtResource("6_tefeu")]
