@@ -9,8 +9,10 @@
 [ext_resource type="PackedScene" uid="uid://cv0706nbbb2kk" path="res://scenes/ui/menu_pausa.tscn" id="6_tefeu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tipki"]
-render_priority = 0
 shader = ExtResource("3_o6xl0")
+shader_parameter/u_time = 0.0
+shader_parameter/u_mouse = Vector2(0, 0)
+shader_parameter/u_resolution = Vector2(0, 0)
 
 [node name="Main" type="Node2D"]
 
