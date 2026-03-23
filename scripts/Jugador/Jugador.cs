@@ -1,19 +1,21 @@
 using Godot;
+using System.Collections.Generic;
 
 public partial class Jugador : CharacterBody2D
 {
-    [Export] public PackedScene EscenaProyectil;
+    [Export] public PackedScene[] EscenasProyectiles; 
+    [Export] public float[] CooldownsBase = { 0.5f, 2.0f, 1.0f, 1.5f };
     
-    // Configuración de fuerza
+    private int _proyectilSeleccionado = 0;
+    private Dictionary<int, double> _proximosDisparos = new();
+
     [Export] public float MinForce = 400f;
     [Export] public float MaxForce = 1500f;
     [Export] public float ChargeTimeMax = 1.2f; 
 
     private float _currentCharge = 0f;
     private bool _isCharging = false;
-
     private int health = 100;
-    
     private Node2D _pivoteCañon;
     private Marker2D _puntoDisparo;
 
@@ -21,77 +23,98 @@ public partial class Jugador : CharacterBody2D
     {
         _pivoteCañon = GetNode<Node2D>("PivoteCañon");
         _puntoDisparo = _pivoteCañon.GetNode<Marker2D>("PuntoDisparo");
+        for (int i = 0; i < 4; i++) _proximosDisparos[i] = 0;
     }
 
-    public override void _Process(double delta)
+public void CambiarMunicion(int indice)
+{
+    // Solo cambiamos si el índice es válido y si no es el proyectil que ya tenemos
+    if (indice >= 0 && indice < EscenasProyectiles.Length && _proyectilSeleccionado != indice)
     {
-        // Apuntar al ratón (con el pivote que creamos antes)
-        _pivoteCañon.LookAt(GetGlobalMousePosition());
+        _proyectilSeleccionado = indice;
+        
+        // Texto para el Print según el índice
+        string nombreProyectil = indice switch {
+            0 => "NORMAL",
+            1 => "FUEGO (DoT)",
+            2 => "HIELO",
+            3 => "EXPLOSIVO",
+            _ => "DESCONOCIDO"
+        };
 
-        // Gestión de la carga
+        // Imprime en la consola de Godot con color
+        GD.PrintRich($"[color=yellow][MUNICIÓN][/color] Cambiado a: [b]{nombreProyectil}[/b]");
+    }
+}
+
+public override void _Process(double delta)
+{
+    _pivoteCañon.LookAt(GetGlobalMousePosition());
+
+    // --- ATAJOS DE TECLADO (1, 2, 3, 4) ---
+    if (Input.IsKeyPressed(Key.Key1)) CambiarMunicion(0);
+    if (Input.IsKeyPressed(Key.Key2)) CambiarMunicion(1);
+    if (Input.IsKeyPressed(Key.Key3)) CambiarMunicion(2);
+    if (Input.IsKeyPressed(Key.Key4)) CambiarMunicion(3);
+
+    ManejarDisparo(delta);
+}
+
+    private void ManejarDisparo(double delta)
+    {
+        double tiempoActual = Time.GetTicksMsec() / 1000.0;
+
         if (Input.IsActionPressed("disparar"))
         {
-            _isCharging = true;
-            _currentCharge += (float)delta;
-            _currentCharge = Mathf.Min(_currentCharge, ChargeTimeMax);
-            
-            // Log para debug (puedes borrarlo luego)
-            // GD.Print($"Cargando: {(_currentCharge / ChargeTimeMax) * 100}%");
+            if (tiempoActual >= _proximosDisparos[_proyectilSeleccionado])
+            {
+                _isCharging = true;
+                _currentCharge = Mathf.Min(_currentCharge + (float)delta, ChargeTimeMax);
+            }
         }
         else if (_isCharging)
         {
-            Fire();
+            Fire(_proyectilSeleccionado);
+            _proximosDisparos[_proyectilSeleccionado] = tiempoActual + CooldownsBase[_proyectilSeleccionado];
             _isCharging = false;
             _currentCharge = 0f;
         }
     }
 
-    private void Fire()
+private void Fire(int tipo)
+{
+    // Verificación 1: ¿El array existe y tiene ese índice?
+    if (EscenasProyectiles == null || tipo >= EscenasProyectiles.Length)
     {
-        var bala = EscenaProyectil.Instantiate<Proyectil>();
-        GetTree().Root.AddChild(bala);
-        
-        // Posicionamos la bala en la punta del cañón
-        bala.GlobalTransform = _puntoDisparo.GlobalTransform;
+        GD.PrintErr($"Error: El índice de proyectil {tipo} no existe en el array.");
+        return;
+    }
 
-        // Calculamos la fuerza final según el tiempo de carga
+    // Verificación 2: ¿Hay una escena asignada en ese índice del Inspector?
+    if (EscenasProyectiles[tipo] == null)
+    {
+        GD.PrintErr($"Error: No hay una escena asignada para el proyectil tipo {tipo} en el Inspector.");
+        return;
+    }
+
+    var instancia = EscenasProyectiles[tipo].Instantiate();
+    
+    // Verificación 3: ¿La escena instanciada tiene el script 'Proyectil'?
+    if (instancia is Proyectil bala)
+    {
+        GetTree().Root.AddChild(bala);
+        bala.GlobalTransform = _puntoDisparo.GlobalTransform;
         float ratio = _currentCharge / ChargeTimeMax;
         float finalForce = Mathf.Lerp(MinForce, MaxForce, ratio);
-
-        // Aplicamos el impulso inicial (Linear Velocity)
-        // Usamos GlobalTransform.X para que salga hacia donde apunta el cañón
         bala.ApplyImpulse(_pivoteCañon.GlobalTransform.X * finalForce);
     }
-
-    private void OnArea2DBodyEntered(Node body)
+    else
     {
-        GD.Print("Algo entró en el área");
-
-    // Opción 1: comprobar por grupo (RECOMENDADO)
-        if (body.IsInGroup("enemigos"))
-        {
-            GD.Print("Es un enemigo!");
-            TakeDamage(10, (Enemigo)body);
-        }
+        GD.PrintErr("Error: La escena del proyectil no tiene el script 'Proyectil.cs' o no hereda de él.");
+        instancia.QueueFree(); // Limpiamos la instancia fallida
     }
+}
 
-    public void TakeDamage(int damage, Enemigo enemigo)
-    {
-        health -= damage;
-        GD.Print($"Jugador recibió {damage} de daño. Salud restante: {health}");
-        enemigo.RecibirDmg(1);
 
-        if (health <= 0)
-        {
-            GD.Print("¡Jugador ha sido destruido!");
-            // Aquí podrías agregar lógica de muerte, reinicio, etc.
-             QueueFree(); // El jugador se destruye al quedarse sin salud
-             GetTree().ChangeSceneToFile("res://scenes/ui/menu_muerte.tscn"); // Volver al menú principal
-        }
-    }
-
-    public int GetHealth()
-    {
-        return health;
-    }
+    public int GetHealth() => health;
 }
