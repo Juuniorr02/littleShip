@@ -2,26 +2,31 @@ using Godot;
 
 public partial class Proyectil : RigidBody2D
 {
-    [Export] public int Dmg = 1;
+    [Export] public int Dmg;
+    [Export] public bool EsDeFuego = false;
+    [Export] public float DuracionFuego = 3.0f;
 
     public override void _Ready()
     {
-        // Conectamos la señal de colisión con cuerpos
+        // Importante: En el Inspector de la bala, 'Contact Monitor' debe ser ON 
+        // y 'Max Contacts Reported' debe ser al menos 1.
         BodyEntered += OnBodyEntered;
     }
 
     private void OnBodyEntered(Node body)
     {
-        // El 'body' es el objeto con el que chocamos
         if (body is Enemigo enemigo)
         {
-            enemigo.RecibirDmg(Dmg);
-            GD.Print("¡Impacto crítico!");
+            if (EsDeFuego)
+                enemigo.Quemarse(Dmg, DuracionFuego);
+            else
+                enemigo.RecibirDmg(Dmg);
+            
+            GD.Print("¡Impacto!");
         }
-        
-        // La bala se destruye al chocar (con el enemigo o el suelo si lo hubiera)
     }
-	    private void OnScreenExited()
+
+    private void OnScreenExited()
     {
         QueueFree();
     }

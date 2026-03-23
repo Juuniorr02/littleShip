@@ -1,5 +1,4 @@
 using Godot;
-using System.Collections;
 using System.Threading.Tasks;
 
 public partial class Enemigo : CharacterBody2D
@@ -14,40 +13,41 @@ public partial class Enemigo : CharacterBody2D
     {
         if (_estaHundiendose)
         {
-            // Se mueve hacia abajo y rota como si zozobrara
             Position += Vector2.Down * _velocidadHundimiento * (float)delta;
-            Rotation += 0.4f * (float)delta; // Rota un poco
-            
-            // Se desvanece (Modulate controla la transparencia)
+            Rotation += 0.4f * (float)delta;
             Color c = Modulate;
             c.A -= 0.5f * (float)delta; 
             Modulate = c;
             return;
         }
-
-        // Movimiento normal a la izquierda
         Position += Vector2.Left * Velocidad * (float)delta;
     }
 
-    public async void RecibirDmg(int cantidad)
+    public void RecibirDmg(int cantidad)
     {
         if (_estaHundiendose) return;
-
         Vida -= cantidad;
-        if (Vida <= 0)
+        if (Vida <= 0) _ = Hundirse(); // Llamada asíncrona segura
+    }
+
+    // NUEVO: Lógica de daño por fuego
+    public async void Quemarse(int dañoPorSegundo, float duracion)
+    {
+        float tiempo = 0;
+        while (tiempo < duracion && !_estaHundiendose && Vida > 0)
         {
-            await Hundirse();
+            RecibirDmg(dañoPorSegundo);
+            Modulate = new Color(1, 0.5f, 0.5f); // Tinte rojizo al arder
+            await Task.Delay(1000); // Espera 1 segundo entre tics
+            tiempo += 1.0f;
+            Modulate = new Color(1, 1, 1); // Vuelve al color original
         }
     }
 
     private async Task Hundirse()
     {
         _estaHundiendose = true;
-        
-        // Importante: Desactivar colisión para que no estorbe a otros barcos
         GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("disabled", true);
-        
-        // Esperamos 2.5 segundos de "animación" de hundido antes de borrarlo
         await Task.Delay(2500);
         QueueFree();
     }
