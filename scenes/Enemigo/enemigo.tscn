@@ -68,8 +68,9 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_5cx2t"]
-size = Vector2(31.39671, 34.67514)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_upvfi"]
+radius = 15.698354
+height = 31.396708
 
 [node name="Enemigo" type="CharacterBody2D" groups=["enemigos"]]
 light_mask = 3
@@ -90,9 +91,9 @@ sprite_frames = SubResource("SpriteFrames_eqivx")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["enemigos"]]
 light_mask = 3
 visibility_layer = 3
-position = Vector2(-1, 0.9999999)
+position = Vector2(0, 1.9999999)
 scale = Vector2(1.4651217, 0.6344603)
-shape = SubResource("RectangleShape2D_5cx2t")
+shape = SubResource("CapsuleShape2D_upvfi")
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." groups=["enemigos"]]
 rect = Rect2(-24, -10, 45, 22)

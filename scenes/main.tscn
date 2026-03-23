@@ -30,9 +30,11 @@ script = ExtResource("1_0wfyh")
 [node name="ColorRect" type="ColorRect" parent="Parallax2D"]
 z_index = 2
 material = SubResource("ShaderMaterial_tipki")
-offset_top = 510.0
-offset_right = 1152.0
-offset_bottom = 530.25
+offset_left = 1152.0
+offset_top = 648.0
+offset_right = 2304.0
+offset_bottom = 668.2504
+rotation = 3.1415927
 scale = Vector2(1, 6.8000026)
 
 [node name="Spawner" type="Node2D" parent="."]

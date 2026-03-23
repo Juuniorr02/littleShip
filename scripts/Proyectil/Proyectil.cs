@@ -20,7 +20,6 @@ public partial class Proyectil : RigidBody2D
         }
         
         // La bala se destruye al chocar (con el enemigo o el suelo si lo hubiera)
-        QueueFree();
     }
 	    private void OnScreenExited()
     {
