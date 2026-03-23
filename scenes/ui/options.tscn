@@ -188,4 +188,4 @@ text = "Aplicar cambios"
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
-text = "Volver sin guardar"
+text = "Volver"

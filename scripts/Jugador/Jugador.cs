@@ -91,7 +91,6 @@ public partial class Jugador : CharacterBody2D
 
     private void Fire(int tipo)
     {
-            GD.Print($"Intentando disparar tipo: {tipo}. Tamaño del array: {EscenasProyectiles.Length}");
     
     if (tipo >= EscenasProyectiles.Length) {
         GD.PrintErr("¡El índice está fuera de rango!");
@@ -165,7 +164,6 @@ public partial class Jugador : CharacterBody2D
         
         if (health <= 0)
         {
-             GetTree().ChangeSceneToFile("res://scenes/ui/menu_muerte.tscn");
         }
     }
 

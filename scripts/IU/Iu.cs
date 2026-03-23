@@ -21,7 +21,7 @@ public partial class Iu : Control
     {
         if (_jugador != null && healthLabel != null)
         {
-            healthLabel.Text = "Vida: " + _jugador.GetHealth().ToString();
+            healthLabel.Text = _jugador.GetHealth().ToString();
         }
     }
 

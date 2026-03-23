@@ -5,6 +5,8 @@ public partial class Enemigo : CharacterBody2D
     [Export] public float Velocidad = 100f;
     [Export] public int Vida;
 
+    public static Enemigo Instance;
+
     // Animación de hundimiento
     private bool _estaHundiendose = false;
     private float _velocidadHundimiento = 40f;
@@ -25,6 +27,8 @@ public partial class Enemigo : CharacterBody2D
         _timerFuego.OneShot = false;
         _timerFuego.Connect("timeout", new Callable(this, "OnTimerFuegoTimeout"));
         AddChild(_timerFuego);
+
+        Instance = this;
     }
 
     public override void _PhysicsProcess(double delta)
@@ -70,6 +74,17 @@ public partial class Enemigo : CharacterBody2D
             // Desactivar colisiones
             GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("disabled", true);
             GetNode<CollisionShape2D>("CollisionShape2D2").SetDeferred("disabled", true);
+        }
+    }
+
+    public void Limpieza()
+    {
+        foreach (Node nodo in GetTree().Root.GetChildren())
+        {
+            if (nodo is Enemigo enemigo)
+            {
+                enemigo.QueueFree();
+            }
         }
     }
 
