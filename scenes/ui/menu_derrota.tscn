@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://be7rf5suhbovs"]
+[gd_scene load_steps=3 format=3 uid="uid://be7rf5suhbovs"]
 
 [ext_resource type="Script" uid="uid://rhagb6dwsw0e" path="res://scripts/IU/MenuDerrota.cs" id="1_hl1jd"]
+[ext_resource type="Texture2D" uid="uid://bja4cqbtupgd6" path="res://assets/fondos/0e4d675c-74cb-4293-bba5-c6c60215ba5b.part0.png" id="2_i7yee"]
 
 [node name="menu_derrota" type="CanvasLayer"]
 script = ExtResource("1_hl1jd")
@@ -21,15 +22,13 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
 
-[node name="derrota" type="TextureRect" parent="PanelContainer/VBoxContainer/imagen"]
-layout_mode = 2
-
 [node name="botones" type="VBoxContainer" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
 
 [node name="reiniciar" type="Button" parent="PanelContainer/VBoxContainer/botones"]
+z_index = 1
 layout_mode = 2
 text = "Reiniciar"
 
@@ -51,3 +50,9 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0.29803923, 0.29803923, 0.29803923, 0.5882353)
+
+[node name="derrota" type="TextureRect" parent="."]
+offset_right = 1155.0
+offset_bottom = 647.0
+texture = ExtResource("2_i7yee")
+expand_mode = 1
