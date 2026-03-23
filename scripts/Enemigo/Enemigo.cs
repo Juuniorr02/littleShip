@@ -4,23 +4,29 @@ using System.Threading.Tasks;
 public partial class Enemigo : CharacterBody2D
 {
     [Export] public float Velocidad = 100f;
-    [Export] public int Vida = 1;
+    [Export] public int Vida;
     
     private bool _estaHundiendose = false;
     private float _velocidadHundimiento = 40f;
 
-    public override void _Process(double delta)
+    public override void _PhysicsProcess(double delta)
     {
         if (_estaHundiendose)
         {
             Position += Vector2.Down * _velocidadHundimiento * (float)delta;
             Rotation += 0.4f * (float)delta;
+
             Color c = Modulate;
-            c.A -= 0.5f * (float)delta; 
+            c.A -= 0.5f * (float)delta;
             Modulate = c;
+
             return;
         }
-        Position += Vector2.Left * Velocidad * (float)delta;
+
+        Velocity = Vector2.Left * Velocidad;
+        MoveAndSlide();
+
+        DetectarColisionJugador();
     }
 
     public void RecibirDmg(int cantidad)
@@ -48,7 +54,25 @@ public partial class Enemigo : CharacterBody2D
     {
         _estaHundiendose = true;
         GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("disabled", true);
+        GetNode<CollisionShape2D>("CollisionShape2D2").SetDeferred("disabled", true);
         await Task.Delay(2500);
         QueueFree();
     }
+
+   private async Task DetectarColisionJugador()
+{
+    for (int i = 0; i < GetSlideCollisionCount(); i++)
+    {
+        var collision = GetSlideCollision(i);
+
+        if (collision.GetCollider() is Jugador jugador)
+        {
+            int daño = Mathf.Max(Vida, 0); // Aseguramos que sea >= 0
+            jugador.RecibirDmg(daño);
+            Hundirse();
+            await Task.CompletedTask; // Para evitar advertencias de async sin await
+            break; // Solo colisionamos con el jugador una vez
+        }
+    }
+}
 }

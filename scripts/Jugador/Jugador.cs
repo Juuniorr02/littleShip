@@ -12,10 +12,11 @@ public partial class Jugador : CharacterBody2D
     [Export] public float MinForce = 400f;
     [Export] public float MaxForce = 1500f;
     [Export] public float ChargeTimeMax = 1.2f; 
+    public static Jugador Instance;
 
     private float _currentCharge = 0f;
     private bool _isCharging = false;
-    private int health = 100;
+    [Export] private int health;
     private Node2D _pivoteCañon;
     private Marker2D _puntoDisparo;
 
@@ -24,6 +25,7 @@ public partial class Jugador : CharacterBody2D
         _pivoteCañon = GetNode<Node2D>("PivoteCañon");
         _puntoDisparo = _pivoteCañon.GetNode<Marker2D>("PuntoDisparo");
         for (int i = 0; i < 4; i++) _proximosDisparos[i] = 0;
+        Instance = this;
     }
 
 public void CambiarMunicion(int indice)
@@ -115,6 +117,13 @@ private void Fire(int tipo)
     }
 }
 
+    public void RecibirDmg(int cantidad)
+    {
+        health -= cantidad;
+        health = Mathf.Max(health, 0);
+
+        GD.Print($"Jugador recibió {cantidad} de daño. Vida restante: {health}");
+    }
 
     public int GetHealth() => health;
 }
