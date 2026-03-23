@@ -41,17 +41,15 @@ public partial class MenuDerrota : CanvasLayer
     }
 
     public void UpdateMenuDerrota()
-	{
-		healthActual = Base.Instance.Health;
-
-		if (Base.Instance.Health <= 0)
-		{
-			isPaused = true;
-        	GetTree().Paused = true;
-        	Visible = true;
-        	Input.MouseMode = Input.MouseModeEnum.Visible;
-		}
-	}
+    {
+        if (Jugador.Instance != null && Jugador.Instance.GetHealth() <= 0)
+        {
+            isPaused = true;
+            GetTree().Paused = true;
+            Visible = true; // Mostrar menú
+            Input.MouseMode = Input.MouseModeEnum.Visible;
+        }
+    }
 
     private void Pausar()
     {
@@ -71,8 +69,6 @@ public partial class MenuDerrota : CanvasLayer
     private void OnReiniciar()
 	{
 		QuitarPausa();
-        Base.Instance.RepairBase();
-        Wave.Instance.ResetWaves();
     	GD.Print("Reiniciar partida");
     	GetTree().ReloadCurrentScene();
 	}

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bhsg85hhkib8o"]
+[gd_scene load_steps=11 format=3 uid="uid://bhsg85hhkib8o"]
 
 [ext_resource type="Script" uid="uid://bxq6evuncwo64" path="res://scripts/MarInfinito.cs" id="1_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://cg8k18i4f2mid" path="res://scenes/Jugador/jugador.tscn" id="1_o5qli"]
@@ -6,7 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://p7cpxdndgu0r" path="res://assets/fondos/origbig (4).png" id="2_tipki"]
 [ext_resource type="PackedScene" uid="uid://byaugw6ercdg1" path="res://scenes/Enemigo/enemigo.tscn" id="3_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://ci612q8twcycd" path="res://scenes/ui/iu.tscn" id="5_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://chun08437m4i1" path="res://scenes/Proyectiles/proyectil.tscn" id="6_85g3d"]
 [ext_resource type="PackedScene" uid="uid://cv0706nbbb2kk" path="res://scenes/ui/menu_pausa.tscn" id="6_tefeu"]
+[ext_resource type="PackedScene" uid="uid://b7n46ikju7id6" path="res://scenes/Proyectiles/proyectilFire.tscn" id="7_choun"]
+[ext_resource type="PackedScene" uid="uid://be7rf5suhbovs" path="res://scenes/ui/menu_derrota.tscn" id="10_choun"]
 
 [node name="Main" type="Node2D"]
 
@@ -42,6 +45,7 @@ wait_time = 0.05
 light_mask = 1
 visibility_layer = 1
 position = Vector2(86, 497)
+EscenasProyectiles = Array[PackedScene]([ExtResource("6_85g3d"), ExtResource("7_choun"), null, null])
 
 [node name="menu_pausa" parent="." instance=ExtResource("6_tefeu")]
 
@@ -58,3 +62,5 @@ offset_right = 40.0
 offset_bottom = 40.0
 scale = Vector2(1, 1.16)
 texture = ExtResource("2_tipki")
+
+[node name="menu_derrota" parent="." instance=ExtResource("10_choun")]
