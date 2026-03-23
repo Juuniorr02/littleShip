@@ -10,16 +10,13 @@ public partial class MenuController : Node
 
     public override void _Ready()
     {
-        Node menuRoot = GetParent();
-
-        // ⭐ GameSettings
         var settings = GetTree().Root.GetNode<GameSettings>("GameSettings");
         settings.LoadConfig();
         settings.ApplySettings();
 
-        Button jugarBtn = FindButton(menuRoot, "Jugar", "NewGame");
-        Button optionsBtn = FindButton(menuRoot, "Opciones", "Options");
-        Button quitBtn = FindButton(menuRoot, "Salir", "Quit");
+        Button jugarBtn = GetNodeOrNull<Button>("%Jugar");
+        Button optionsBtn = GetNodeOrNull<Button>("%Opciones");
+        Button quitBtn = GetNodeOrNull<Button>("%Salir");
 
         if (jugarBtn != null)
             jugarBtn.Pressed += OnJugarGame;
@@ -30,48 +27,12 @@ public partial class MenuController : Node
         if (quitBtn != null)
             quitBtn.Pressed += OnQuit;
 
-        // Dialog
-        messageDialog = menuRoot.GetNodeOrNull<AcceptDialog>("MessageDialog");
-
-        if (messageDialog == null)
-        {
-            foreach (var c in menuRoot.GetChildren())
-            {
-                if (c is AcceptDialog ad)
-                {
-                    messageDialog = ad;
-                    break;
-                }
-            }
-        }
+        messageDialog = GetNodeOrNull<AcceptDialog>("MessageDialog");
 
         if (messageDialog != null)
             dialogLabel = messageDialog.GetNodeOrNull<Label>("DialogLabel");
 
-        // ⭐ asegurar cursor visible en menú
         Input.MouseMode = Input.MouseModeEnum.Visible;
-    }
-
-    private Button FindButton(Node root, string textMatch, string nameContains)
-    {
-        if (root == null) return null;
-
-        foreach (var c in root.GetChildren())
-        {
-            if (c is Button b)
-            {
-                if (b.Text == textMatch || b.Name.ToString().Contains(nameContains))
-                    return b;
-            }
-
-            if (c is Node n)
-            {
-                var found = FindButton(n, textMatch, nameContains);
-                if (found != null) return found;
-            }
-        }
-
-        return null;
     }
 
     public override void _UnhandledInput(InputEvent @event)

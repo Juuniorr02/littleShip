@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bbonqqtv83ufa"]
+[gd_scene load_steps=3 format=3 uid="uid://bbonqqtv83ufa"]
 
 [ext_resource type="Script" uid="uid://dgvm76x1xqbil" path="res://scripts/IU/OptionsController.cs" id="1_u46ye"]
+[ext_resource type="Texture2D" uid="uid://hv0dmitmsmyo" path="res://assets/fondos/fondo.png" id="2_lr2b1"]
 
 [node name="OptionsController" type="Control"]
 layout_mode = 3
@@ -12,7 +13,7 @@ script = ExtResource("1_u46ye")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
-self_modulate = Color(1, 1, 1, 0.78431374)
+self_modulate = Color(0.54926336, 0.54926336, 0.54926336, 1)
 z_index = -1
 texture_filter = 1
 anchors_preset = 15
@@ -20,6 +21,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("2_lr2b1")
 expand_mode = 1
 
 [node name="CenterContainer" type="CenterContainer" parent="CanvasLayer"]
