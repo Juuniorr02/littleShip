@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bhsg85hhkib8o"]
+[gd_scene load_steps=13 format=3 uid="uid://bhsg85hhkib8o"]
 
 [ext_resource type="Script" uid="uid://bxq6evuncwo64" path="res://scripts/MarInfinito.cs" id="1_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://cg8k18i4f2mid" path="res://scenes/Jugador/jugador.tscn" id="1_o5qli"]
@@ -9,6 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://chun08437m4i1" path="res://scenes/Proyectiles/proyectil.tscn" id="6_85g3d"]
 [ext_resource type="PackedScene" uid="uid://cv0706nbbb2kk" path="res://scenes/ui/menu_pausa.tscn" id="6_tefeu"]
 [ext_resource type="PackedScene" uid="uid://b7n46ikju7id6" path="res://scenes/Proyectiles/proyectilFire.tscn" id="7_choun"]
+[ext_resource type="PackedScene" uid="uid://c4cmswxigb4l8" path="res://scenes/Proyectiles/proyectilRafaga.tscn" id="8_eb6dy"]
+[ext_resource type="PackedScene" uid="uid://dx1e72577jsbi" path="res://scenes/Proyectiles/proyectilSonico.tscn" id="9_trceg"]
 [ext_resource type="PackedScene" uid="uid://be7rf5suhbovs" path="res://scenes/ui/menu_derrota.tscn" id="10_choun"]
 
 [node name="Main" type="Node2D"]
@@ -45,7 +47,7 @@ wait_time = 0.05
 light_mask = 1
 visibility_layer = 1
 position = Vector2(86, 497)
-EscenasProyectiles = Array[PackedScene]([ExtResource("6_85g3d"), ExtResource("7_choun"), null, null])
+EscenasProyectiles = Array[PackedScene]([ExtResource("6_85g3d"), ExtResource("7_choun"), ExtResource("8_eb6dy"), ExtResource("9_trceg")])
 
 [node name="menu_pausa" parent="." instance=ExtResource("6_tefeu")]
 
