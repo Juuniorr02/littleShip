@@ -54,7 +54,7 @@ z_index = -1
 repeat_size = Vector2(1152, 0)
 repeat_times = 3
 script = ExtResource("1_0wfyh")
-VelocidadMar = -50.0
+VelocidadMar = 50.0
 
 [node name="TextureRect" type="TextureRect" parent="Parallax2D2"]
 self_modulate = Color(1.8247963, 1.8247963, 1.8247963, 1)

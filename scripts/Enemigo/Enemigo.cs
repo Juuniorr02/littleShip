@@ -1,18 +1,37 @@
 using Godot;
-using System.Threading.Tasks;
 
 public partial class Enemigo : CharacterBody2D
 {
     [Export] public float Velocidad = 100f;
     [Export] public int Vida;
-    
+
+    // Animación de hundimiento
     private bool _estaHundiendose = false;
     private float _velocidadHundimiento = 40f;
+    private float _tiempoHundimiento = 0f;
+    private float _duracionHundimiento = 2.5f;
+
+    // Daño por fuego (DoT)
+    [Export] public int DañoPorSegundo = 5;
+    [Export] public float DuracionFuego = 3f;
+    private float _tiempoFuego = 0f;
+    private Timer _timerFuego;
+
+    public override void _Ready()
+    {
+        // Configuramos el timer para daño por fuego
+        _timerFuego = new Timer();
+        _timerFuego.WaitTime = 1f; // se dispara cada segundo
+        _timerFuego.OneShot = false;
+        _timerFuego.Connect("timeout", new Callable(this, "OnTimerFuegoTimeout"));
+        AddChild(_timerFuego);
+    }
 
     public override void _PhysicsProcess(double delta)
     {
         if (_estaHundiendose)
         {
+            // Animación de hundimiento
             Position += Vector2.Down * _velocidadHundimiento * (float)delta;
             Rotation += 0.4f * (float)delta;
 
@@ -20,59 +39,91 @@ public partial class Enemigo : CharacterBody2D
             c.A -= 0.5f * (float)delta;
             Modulate = c;
 
+            // Liberamos el nodo cuando termina la animación
+            _tiempoHundimiento += (float)delta;
+            if (_tiempoHundimiento >= _duracionHundimiento)
+            {
+                QueueFree();
+            }
+
             return;
         }
 
+        // Movimiento normal
         Velocity = Vector2.Left * Velocidad;
         MoveAndSlide();
 
+        // Detectar colisión con jugador
         DetectarColisionJugador();
     }
 
     public void RecibirDmg(int cantidad)
     {
         if (_estaHundiendose) return;
+
         Vida -= cantidad;
-        if (Vida <= 0) _ = Hundirse(); // Llamada asíncrona segura
-    }
 
-    // NUEVO: Lógica de daño por fuego
-    public async void Quemarse(int dañoPorSegundo, float duracion)
-    {
-        float tiempo = 0;
-        while (tiempo < duracion && !_estaHundiendose && Vida > 0)
+        if (Vida <= 0 && !_estaHundiendose)
         {
-            RecibirDmg(dañoPorSegundo);
-            Modulate = new Color(1, 0.5f, 0.5f); // Tinte rojizo al arder
-            await Task.Delay(1000); // Espera 1 segundo entre tics
-            tiempo += 1.0f;
-            Modulate = new Color(1, 1, 1); // Vuelve al color original
+            _estaHundiendose = true;
+
+            // Desactivar colisiones
+            GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("disabled", true);
+            GetNode<CollisionShape2D>("CollisionShape2D2").SetDeferred("disabled", true);
         }
     }
 
-    private async Task Hundirse()
+    // Aplicar daño por fuego (DoT) seguro usando Timer
+    public void Quemarse(int dañoPorSegundo, float duracion)
     {
-        _estaHundiendose = true;
-        GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("disabled", true);
-        GetNode<CollisionShape2D>("CollisionShape2D2").SetDeferred("disabled", true);
-        await Task.Delay(2500);
-        QueueFree();
+        if (_estaHundiendose) return;
+
+        DañoPorSegundo = dañoPorSegundo;
+        DuracionFuego = duracion;
+        _tiempoFuego = 0f;
+
+        Modulate = new Color(1, 0.5f, 0.5f); // color rojizo
+        _timerFuego.Start();
     }
 
-   private async Task DetectarColisionJugador()
-{
-    for (int i = 0; i < GetSlideCollisionCount(); i++)
+    private void OnTimerFuegoTimeout()
     {
-        var collision = GetSlideCollision(i);
-
-        if (collision.GetCollider() is Jugador jugador)
+        if (_estaHundiendose)
         {
-            int daño = Mathf.Max(Vida, 0); // Aseguramos que sea >= 0
-            jugador.RecibirDmg(daño);
-            Hundirse();
-            await Task.CompletedTask; // Para evitar advertencias de async sin await
-            break; // Solo colisionamos con el jugador una vez
+            _timerFuego.Stop();
+            return;
+        }
+
+        RecibirDmg(DañoPorSegundo);
+
+        _tiempoFuego += 1f;
+        if (_tiempoFuego >= DuracionFuego)
+        {
+            _timerFuego.Stop();
+            Modulate = new Color(1, 1, 1); // volver a color normal
         }
     }
-}
+
+    private void DetectarColisionJugador()
+    {
+        if (_estaHundiendose) return;
+
+        for (int i = 0; i < GetSlideCollisionCount(); i++)
+        {
+            var collision = GetSlideCollision(i);
+
+            if (collision.GetCollider() is Jugador jugador)
+            {
+                int daño = Mathf.Max(Vida, 0);
+                jugador.RecibirDmg(daño);
+
+                // Iniciar hundimiento tras golpear al jugador
+                _estaHundiendose = true;
+                GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("disabled", true);
+                GetNode<CollisionShape2D>("CollisionShape2D2").SetDeferred("disabled", true);
+
+                break; // solo se aplica una vez
+            }
+        }
+    }
 }

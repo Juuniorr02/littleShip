@@ -13,6 +13,7 @@ contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_i5mrh")
 Dmg = 4
+DuracionFuego = 0.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1

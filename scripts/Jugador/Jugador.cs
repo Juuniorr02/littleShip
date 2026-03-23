@@ -125,5 +125,11 @@ private void Fire(int tipo)
         GD.Print($"Jugador recibió {cantidad} de daño. Vida restante: {health}");
     }
 
+    public void Revivir()
+    {
+        health = 100; // Restablece la vida a 100 o al valor que desees
+        GD.Print("Jugador ha sido revivido. Vida restaurada a: " + health);
+    }
+
     public int GetHealth() => health;
 }

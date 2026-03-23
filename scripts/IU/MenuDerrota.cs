@@ -69,6 +69,8 @@ public partial class MenuDerrota : CanvasLayer
     private void OnReiniciar()
 	{
 		QuitarPausa();
+        Input.MouseMode = Input.MouseModeEnum.Visible;
+        Jugador.Instance.Revivir();
     	GD.Print("Reiniciar partida");
     	GetTree().ReloadCurrentScene();
 	}
