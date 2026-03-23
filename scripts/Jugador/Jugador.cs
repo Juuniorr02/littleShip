@@ -2,21 +2,22 @@ using Godot;
 using System.Collections.Generic;
 
 public partial class Jugador : CharacterBody2D
-{
-    [Export] public PackedScene[] EscenasProyectiles; 
+{    [Export] public PackedScene[] EscenasProyectiles;
     [Export] public float[] CooldownsBase = { 0.5f, 2.0f, 1.0f, 1.5f };
     
     private int _proyectilSeleccionado = 0;
-    private Dictionary<int, double> _proximosDisparos = new();
+    private Dictionary<int, double> _proximosDisparos = new Dictionary<int, double>();
 
     [Export] public float MinForce = 400f;
     [Export] public float MaxForce = 1500f;
     [Export] public float ChargeTimeMax = 1.2f; 
+    
     public static Jugador Instance;
 
     private float _currentCharge = 0f;
     private bool _isCharging = false;
-    [Export] private int health;
+    [Export] private int health = 100;
+    
     private Node2D _pivoteCañon;
     private Marker2D _puntoDisparo;
 
@@ -24,43 +25,47 @@ public partial class Jugador : CharacterBody2D
     {
         _pivoteCañon = GetNode<Node2D>("PivoteCañon");
         _puntoDisparo = _pivoteCañon.GetNode<Marker2D>("PuntoDisparo");
-        for (int i = 0; i < 4; i++) _proximosDisparos[i] = 0;
+        
+        // Inicializar los tiempos de disparo para evitar errores de diccionario
+        for (int i = 0; i < 4; i++) 
+        {
+            _proximosDisparos[i] = 0;
+        }
+        
         Instance = this;
     }
 
-public void CambiarMunicion(int indice)
-{
-    // Solo cambiamos si el índice es válido y si no es el proyectil que ya tenemos
-    if (indice >= 0 && indice < EscenasProyectiles.Length && _proyectilSeleccionado != indice)
+    public override void _Process(double delta)
     {
-        _proyectilSeleccionado = indice;
-        
-        // Texto para el Print según el índice
-        string nombreProyectil = indice switch {
-            0 => "NORMAL",
-            1 => "FUEGO",
-            2 => "RAFAGA",
-            3 => "SONICO",
-            _ => "DESCONOCIDO"
-        };
+        // Apuntar al ratón
+        _pivoteCañon.LookAt(GetGlobalMousePosition());
 
-        // Imprime en la consola de Godot con colorS
-        GD.PrintRich($"[color=yellow][MUNICIÓN][/color] Cambiado a: [b]{nombreProyectil}[/b]");
+        // Atajos de teclado para cambiar munición
+        if (Input.IsKeyPressed(Key.Key1)) CambiarMunicion(0);
+        if (Input.IsKeyPressed(Key.Key2)) CambiarMunicion(1);
+        if (Input.IsKeyPressed(Key.Key3)) CambiarMunicion(2);
+        if (Input.IsKeyPressed(Key.Key4)) CambiarMunicion(3);
+
+        ManejarDisparo(delta);
     }
-}
 
-public override void _Process(double delta)
-{
-    _pivoteCañon.LookAt(GetGlobalMousePosition());
+    public void CambiarMunicion(int indice)
+    {
+        if (indice >= 0 && indice < EscenasProyectiles.Length && _proyectilSeleccionado != indice)
+        {
+            _proyectilSeleccionado = indice;
+            
+            string nombreProyectil = indice switch {
+                0 => "NORMAL",
+                1 => "FUEGO",
+                2 => "RAFAGA",
+                3 => "SONICO",
+                _ => "DESCONOCIDO"
+            };
 
-    // --- ATAJOS DE TECLADO (1, 2, 3, 4) ---
-    if (Input.IsKeyPressed(Key.Key1)) CambiarMunicion(0);
-    if (Input.IsKeyPressed(Key.Key2)) CambiarMunicion(1);
-    if (Input.IsKeyPressed(Key.Key3)) CambiarMunicion(2);
-    if (Input.IsKeyPressed(Key.Key4)) CambiarMunicion(3);
-
-    ManejarDisparo(delta);
-}
+            GD.PrintRich($"[color=yellow][MUNICIÓN][/color] Cambiado a: [b]{nombreProyectil}[/b]");
+        }
+    }
 
     private void ManejarDisparo(double delta)
     {
@@ -68,6 +73,7 @@ public override void _Process(double delta)
 
         if (Input.IsActionPressed("disparar"))
         {
+            // Solo empezamos a cargar si el cooldown ha pasado
             if (tiempoActual >= _proximosDisparos[_proyectilSeleccionado])
             {
                 _isCharging = true;
@@ -83,46 +89,84 @@ public override void _Process(double delta)
         }
     }
 
-private void Fire(int tipo)
-{
-    // Verificación 1: ¿El array existe y tiene ese índice?
-    if (EscenasProyectiles == null || tipo >= EscenasProyectiles.Length)
+    private void Fire(int tipo)
     {
-        GD.PrintErr($"Error: El índice de proyectil {tipo} no existe en el array.");
-        return;
-    }
-
-    // Verificación 2: ¿Hay una escena asignada en ese índice del Inspector?
-    if (EscenasProyectiles[tipo] == null)
-    {
-        GD.PrintErr($"Error: No hay una escena asignada para el proyectil tipo {tipo} en el Inspector.");
-        return;
-    }
-
-    var instancia = EscenasProyectiles[tipo].Instantiate();
+            GD.Print($"Intentando disparar tipo: {tipo}. Tamaño del array: {EscenasProyectiles.Length}");
     
-    // Verificación 3: ¿La escena instanciada tiene el script 'Proyectil'?
-    if (instancia is Proyectil bala)
+    if (tipo >= EscenasProyectiles.Length) {
+        GD.PrintErr("¡El índice está fuera de rango!");
+        return;
+    }
+
+    if (EscenasProyectiles[tipo] == null) {
+        GD.PrintErr($"¡La casilla {tipo} del Inspector está VACÍA!");
+        return;
+    }
+        if (tipo >= EscenasProyectiles.Length || EscenasProyectiles[tipo] == null)
+        {
+            GD.PrintErr($"[ERROR] No hay escena asignada en el índice {tipo}");
+            return;
+        }
+
+        // 1. Instanciamos la primera bala
+        var instancia = EscenasProyectiles[tipo].Instantiate();
+        GetTree().Root.AddChild(instancia);
+
+        if (instancia is Proyectil primeraBala)
+        {
+            ConfigurarBala(primeraBala);
+
+            // 2. Si es ráfaga, disparamos 4 adicionales
+            if (primeraBala.EsRafaga)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    var extra = EscenasProyectiles[tipo].Instantiate() as Proyectil;
+                    GetTree().Root.AddChild(extra);
+                    ConfigurarBala(extra, true); // Aplicar dispersión extra
+                }
+                GD.Print("¡Ráfaga de 5 proyectiles!");
+            }
+        }
+        else
+        {
+            GD.PrintErr($"[ERROR] El objeto instanciado no es de tipo 'Proyectil'");
+            instancia.QueueFree();
+        }
+    }
+
+    private void ConfigurarBala(Proyectil bala, bool conDispersion = false)
     {
-        GetTree().Root.AddChild(bala);
+        // Posicionamiento inicial
         bala.GlobalTransform = _puntoDisparo.GlobalTransform;
+        
+        // Cálculo de fuerza según la carga
         float ratio = _currentCharge / ChargeTimeMax;
-        float finalForce = Mathf.Lerp(MinForce, MaxForce, ratio);
-        bala.ApplyImpulse(_pivoteCañon.GlobalTransform.X * finalForce);
+        float fuerza = Mathf.Lerp(MinForce, MaxForce, ratio);
+        Vector2 direccion = _pivoteCañon.GlobalTransform.X;
+
+        // Si es ráfaga o una bala extra, aplicamos aleatoriedad
+        if (conDispersion || bala.EsRafaga)
+        {
+            float desvio = Mathf.DegToRad((float)GD.RandRange(-15.0, 15.0));
+            direccion = direccion.Rotated(desvio);
+            fuerza *= (float)GD.RandRange(0.8, 1.2);
+        }
+
+        // Aplicamos el movimiento al RigidBody2D
+        bala.LinearVelocity = direccion * fuerza;
     }
-    else
-    {
-        GD.PrintErr("Error: La escena del proyectil no tiene el script 'Proyectil.cs' o no hereda de él.");
-        instancia.QueueFree(); // Limpiamos la instancia fallida
-    }
-}
 
     public void RecibirDmg(int cantidad)
     {
         health -= cantidad;
         health = Mathf.Max(health, 0);
-
         GD.Print($"Jugador recibió {cantidad} de daño. Vida restante: {health}");
+        
+        if (health <= 0)
+        {
+             GetTree().ChangeSceneToFile("res://scenes/ui/menu_muerte.tscn");
+        }
     }
 
     public void Revivir()
