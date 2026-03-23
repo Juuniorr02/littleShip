@@ -1,25 +1,25 @@
-[gd_scene load_steps=4 format=3 uid="uid://b7n46ikju7id6"]
+[gd_scene load_steps=4 format=3 uid="uid://dx1e72577jsbi"]
 
-[ext_resource type="Script" uid="uid://bbhlo42eh8bxj" path="res://scripts/Proyectil/Proyectil.cs" id="1_dspxu"]
-[ext_resource type="Texture2D" uid="uid://devxxbylt2o2e" path="res://assets/proyectil/ProyectilFire.png" id="2_dspxu"]
+[ext_resource type="Script" uid="uid://bbhlo42eh8bxj" path="res://scripts/Proyectil/Proyectil.cs" id="1_l8r1g"]
+[ext_resource type="Texture2D" uid="uid://5k30boyry14b" path="res://assets/proyectil/proyectilCannon.png" id="2_exy43"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1dnse"]
-radius = 4.0
+radius = 5.0
 
-[node name="ProyectilFire" type="RigidBody2D"]
+[node name="ProyectilSonico" type="RigidBody2D"]
 collision_layer = 0
 collision_mask = 2
 contact_monitor = true
 max_contacts_reported = 1
-script = ExtResource("1_dspxu")
+script = ExtResource("1_l8r1g")
 Dmg = 2
 EsDeFuego = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
-position = Vector2(-1, 0)
-scale = Vector2(0.52812445, 0.57687527)
-texture = ExtResource("2_dspxu")
+position = Vector2(0.27000356, 0.23000443)
+scale = Vector2(0.60812473, 0.57687527)
+texture = ExtResource("2_exy43")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_1dnse")

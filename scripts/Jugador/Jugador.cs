@@ -38,13 +38,13 @@ public void CambiarMunicion(int indice)
         // Texto para el Print según el índice
         string nombreProyectil = indice switch {
             0 => "NORMAL",
-            1 => "FUEGO (DoT)",
-            2 => "HIELO",
-            3 => "EXPLOSIVO",
+            1 => "FUEGO",
+            2 => "RAFAGA",
+            3 => "SONICO",
             _ => "DESCONOCIDO"
         };
 
-        // Imprime en la consola de Godot con color
+        // Imprime en la consola de Godot con colorS
         GD.PrintRich($"[color=yellow][MUNICIÓN][/color] Cambiado a: [b]{nombreProyectil}[/b]");
     }
 }
