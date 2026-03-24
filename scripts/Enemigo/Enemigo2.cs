@@ -23,6 +23,7 @@ public partial class Enemigo2 : CharacterBody2D
 
     public override void _Ready()
     {
+        AddToGroup("Enemigos");
         _yOriginal = GlobalPosition.Y;
 
         _timerFuego = new Timer();
