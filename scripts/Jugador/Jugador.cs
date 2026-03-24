@@ -91,33 +91,35 @@ private void ActualizarVisualizacionTrayectoria()
     _lineaTrayectoria.Visible = true;
     _lineaTrayectoria.ClearPoints();
 
-    // Importante para que dibuje en el sitio correcto
-    _lineaTrayectoria.GlobalPosition = Vector2.Zero;
-    _lineaTrayectoria.Rotation = 0;
+    // Colocamos el origen de la línea en la punta del cañón
+    _lineaTrayectoria.GlobalPosition = _puntoDisparo.GlobalPosition;
+    _lineaTrayectoria.GlobalRotation = 0; // Importante: la línea no debe rotar, los puntos ya tienen el ángulo
 
-    // 1. Calculamos la fuerza actual
+    // 1. Calculamos la fuerza EXACTA (Igual que en ConfigurarBala)
     float ratio = _currentCharge / ChargeTimeMax;
     float fuerza = Mathf.Lerp(MinForce, MaxForce, ratio);
     
+    // 2. Usamos el transform global del pivote para la dirección exacta
     Vector2 velocidadInicial = _pivoteCañon.GlobalTransform.X * fuerza;
-    Vector2 posActual = _puntoDisparo.GlobalPosition;
     
+    // 3. Obtenemos la gravedad
     float gravedad = (float)ProjectSettings.GetSetting("physics/2d/default_gravity");
 
-    // --- CONFIGURACIÓN PARA GUÍA CORTA ---
-    int numPuntos = 8;        // Pocos puntos para que la línea sea corta
-    float pasoTiempo = 0.03f; // Tiempo muy corto entre puntos para que parezca casi recta
+    // --- DIBUJO DE LA GUÍA ---
+    int numPuntos = 12;        // Aumentamos un poco para ver más camino
+    float pasoTiempo = 0.05f; 
 
     for (int i = 0; i < numPuntos; i++)
     {
         float t = i * pasoTiempo;
         
-        // Ecuación de trayectoria (aunque sea corta, si hay mucha gravedad se curvará un poco)
-        Vector2 puntoEnElMundo = posActual + (velocidadInicial * t) + new Vector2(0, 0.5f * gravedad * t * t);
+        // Ecuación física estándar sin fricción
+        Vector2 puntoLocal = (velocidadInicial * t) + new Vector2(0, 0.5f * gravedad * t * t);
         
-        _lineaTrayectoria.AddPoint(puntoEnElMundo);
+        _lineaTrayectoria.AddPoint(puntoLocal);
     }
 }
+
 
 
     // (El resto de tus funciones: CambiarMunicion, Fire, ConfigurarBala... se mantienen igual)
