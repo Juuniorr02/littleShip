@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bhsg85hhkib8o"]
+[gd_scene load_steps=15 format=3 uid="uid://bhsg85hhkib8o"]
 
 [ext_resource type="Script" uid="uid://bxq6evuncwo64" path="res://scripts/MarInfinito.cs" id="1_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://cg8k18i4f2mid" path="res://scenes/Jugador/jugador.tscn" id="1_o5qli"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://dontsms2ko4p3" path="res://assets/fondos/agua.png" id="3_trceg"]
 [ext_resource type="PackedScene" uid="uid://ci612q8twcycd" path="res://scenes/ui/iu.tscn" id="5_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://chun08437m4i1" path="res://scenes/Proyectiles/proyectil.tscn" id="6_85g3d"]
+[ext_resource type="PackedScene" uid="uid://b3aijnffwt65b" path="res://scenes/Enemigo/enemigo2.tscn" id="6_a8y0u"]
 [ext_resource type="PackedScene" uid="uid://cv0706nbbb2kk" path="res://scenes/ui/menu_pausa.tscn" id="6_tefeu"]
 [ext_resource type="PackedScene" uid="uid://b7n46ikju7id6" path="res://scenes/Proyectiles/proyectilFire.tscn" id="7_choun"]
 [ext_resource type="PackedScene" uid="uid://c4cmswxigb4l8" path="res://scenes/Proyectiles/proyectilRafaga.tscn" id="8_eb6dy"]
@@ -52,13 +53,12 @@ texture = ExtResource("3_trceg")
 [node name="Spawner" type="Node2D" parent="."]
 script = ExtResource("2_sugp2")
 EscenaEnemigo = ExtResource("3_jyhfs")
+EscenaEnemigo2 = ExtResource("6_a8y0u")
 
 [node name="Timer" type="Timer" parent="Spawner"]
 wait_time = 0.05
 
 [node name="Jugador" parent="." instance=ExtResource("1_o5qli")]
-light_mask = 1
-visibility_layer = 1
 position = Vector2(86, 497)
 EscenasProyectiles = Array[PackedScene]([ExtResource("6_85g3d"), ExtResource("7_choun"), ExtResource("8_eb6dy"), ExtResource("9_trceg")])
 
@@ -74,7 +74,7 @@ script = ExtResource("1_0wfyh")
 VelocidadMar = 50.0
 
 [node name="Container" type="PanelContainer" parent="Parallax2D2"]
-anchors_preset = -1
+anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
