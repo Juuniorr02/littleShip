@@ -1,10 +1,10 @@
 using Godot;
 using System.Collections.Generic;
+using System;
 
 public partial class Jugador : CharacterBody2D
-{
-    [Export] public PackedScene[] EscenasProyectiles;
-    [Export] public float[] CooldownsBase = { 0.5f, 2.0f, 1.0f, 1.5f };
+{   [Export] public PackedScene[] EscenasProyectiles;
+    [Export] public float[] CooldownsBase = {};
     
     private int _proyectilSeleccionado = 0;
     private Dictionary<int, double> _proximosDisparos = new Dictionary<int, double>();
@@ -171,6 +171,13 @@ private void ActualizarVisualizacionTrayectoria()
         }
 
         bala.LinearVelocity = direccion * fuerza;
+    }
+
+    public float GetCooldownRestante(int indice)
+    {
+        double tiempoActual = Time.GetTicksMsec() / 1000.0;
+        double restante = _proximosDisparos[indice] - tiempoActual;
+        return (float)Math.Max(restante, 0); // Nunca negativo
     }
 
     public void RecibirDmg(int cantidad)
