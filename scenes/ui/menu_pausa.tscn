@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cv0706nbbb2kk"]
+[gd_scene load_steps=3 format=3 uid="uid://cv0706nbbb2kk"]
 
 [ext_resource type="Script" uid="uid://csn4cpbb2rnaa" path="res://scripts/IU/menu_pausa.cs" id="1_8tp32"]
+[ext_resource type="Texture2D" uid="uid://pg684ae5xxf4" path="res://assets/fondos/si5.png" id="2_ipeia"]
 
 [node name="menu_pausa" type="CanvasLayer"]
 layer = 5
@@ -25,13 +26,12 @@ layout_mode = 2
 text = "Volver"
 
 [node name="volver" type="Button" parent="CenterContainer/VBoxContainer"]
-z_index = 10
 texture_filter = 1
 layout_mode = 2
-action_mode = 0
-text = "Salir del nivel"
-icon_alignment = 1
-expand_icon = true
+size_flags_horizontal = 4
+size_flags_vertical = 6
+icon = ExtResource("2_ipeia")
+flat = true
 
 [node name="Overlay" type="ColorRect" parent="."]
 z_index = -1
