@@ -6,6 +6,7 @@ public partial class MenuDerrota : CanvasLayer
     private Button btnReiniciar;
 	private int healthActual;
     private bool isPaused = false;
+    public static Enemigo Instance;
 
     public override void _Ready()
     {

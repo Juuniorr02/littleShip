@@ -2,143 +2,131 @@ using Godot;
 
 public partial class Enemigo : CharacterBody2D
 {
-    [Export] public float Velocidad;
-    [Export] public int Vida;
+    [Export] public float Velocidad = 100f;
+    [Export] public int Vida = 10;
+    
+    private Vector2 _retrocesoActual = Vector2.Zero;
+    [Export] public float FriccionRetroceso = 5f; // Bajada para que el golpe se deslice más
 
-    public static Enemigo Instance;
+    private float _yOriginal; 
 
-    // Animación de hundimiento
     private bool _estaHundiendose = false;
     private float _velocidadHundimiento = 40f;
     private float _tiempoHundimiento = 0f;
     private float _duracionHundimiento = 2.5f;
 
-    // Daño por fuego (DoT)
-    [Export] public int DañoPorSegundo;
-    [Export] public float DuracionFuego;
+    [Export] public int DañoPorSegundo = 5;
+    [Export] public float DuracionFuego = 3f;
     private float _tiempoFuego = 0f;
     private Timer _timerFuego;
+    public static Enemigo Instance;
 
     public override void _Ready()
     {
-        // Configuramos el timer para daño por fuego
+        _yOriginal = GlobalPosition.Y;
+
         _timerFuego = new Timer();
-        _timerFuego.WaitTime = 1f; // se dispara cada segundo
+        _timerFuego.WaitTime = 1f;
         _timerFuego.OneShot = false;
         _timerFuego.Connect("timeout", new Callable(this, "OnTimerFuegoTimeout"));
         AddChild(_timerFuego);
-
-        Instance = this;
     }
 
     public override void _PhysicsProcess(double delta)
     {
         if (_estaHundiendose)
         {
-            // Animación de hundimiento
             Position += Vector2.Down * _velocidadHundimiento * (float)delta;
             Rotation += 0.4f * (float)delta;
-
             Color c = Modulate;
             c.A -= 0.5f * (float)delta;
             Modulate = c;
 
-            // Liberamos el nodo cuando termina la animación
             _tiempoHundimiento += (float)delta;
-            if (_tiempoHundimiento >= _duracionHundimiento)
-            {
-                QueueFree();
-            }
-
+            if (_tiempoHundimiento >= _duracionHundimiento) QueueFree();
             return;
         }
 
-        // Movimiento normal
-        Velocity = Vector2.Left * Velocidad;
-        MoveAndSlide();
+        // 1. Movimiento base hacia la IZQUIERDA
+        Vector2 movimientoBase = Vector2.Left * Velocidad;
 
-        // Detectar colisión con jugador
+        // 2. Fuerza de flotación (Efecto "Muelle")
+        // Esta fuerza solo actúa en el eje Y para devolverlo a su carril
+        float diferenciaY = _yOriginal - GlobalPosition.Y;
+        Vector2 fuerzaRetornoY = new Vector2(0, diferenciaY * 4.0f); // 4.0f es la suavidad del retorno
+
+        // 3. VELOCIDAD FINAL
+        // Sumamos el movimiento constante + el golpe (en cualquier dirección) + la flotación
+        Velocity = movimientoBase + _retrocesoActual + fuerzaRetornoY;
+
+        // 4. Aplicamos fricción al retroceso
+        _retrocesoActual = _retrocesoActual.Lerp(Vector2.Zero, (float)delta * FriccionRetroceso);
+
+        MoveAndSlide();
         DetectarColisionJugador();
     }
+
+public void AplicarRetroceso(Vector2 fuerza)
+{
+    if (_estaHundiendose) return;
+    
+    // Resetear el retroceso anterior si quieres que el impacto sea seco,
+    // o sumarlo si quieres que varios impactos lo manden muy lejos.
+    _retrocesoActual = fuerza; 
+}
+
 
     public void RecibirDmg(int cantidad)
     {
         if (_estaHundiendose) return;
-
         Vida -= cantidad;
-
-        if (Vida <= 0 && !_estaHundiendose)
-        {
-            _estaHundiendose = true;
-
-            // Desactivar colisiones
-            GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("disabled", true);
-            GetNode<CollisionShape2D>("CollisionShape2D2").SetDeferred("disabled", true);
-        }
+        if (Vida <= 0) Hundirse();
     }
 
-    public void Limpieza()
+    private void Hundirse()
     {
-        foreach (Node nodo in GetTree().Root.GetChildren())
-        {
-            if (nodo is Enemigo enemigo)
-            {
-                enemigo.QueueFree();
-            }
-        }
+        _estaHundiendose = true;
+        if (HasNode("CollisionShape2D")) GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("disabled", true);
+        if (HasNode("CollisionShape2D2")) GetNode<CollisionShape2D>("CollisionShape2D2").SetDeferred("disabled", true);
     }
 
-    // Aplicar daño por fuego (DoT) seguro usando Timer
     public void Quemarse(int dañoPorSegundo, float duracion)
     {
         if (_estaHundiendose) return;
-
         DañoPorSegundo = dañoPorSegundo;
         DuracionFuego = duracion;
         _tiempoFuego = 0f;
-
-        Modulate = new Color(1, 0.5f, 0.5f); // color rojizo
+        Modulate = new Color(1, 0.5f, 0.5f);
         _timerFuego.Start();
     }
 
     private void OnTimerFuegoTimeout()
     {
-        if (_estaHundiendose)
-        {
-            _timerFuego.Stop();
-            return;
-        }
-
+        if (_estaHundiendose) { _timerFuego.Stop(); return; }
         RecibirDmg(DañoPorSegundo);
-
         _tiempoFuego += 1f;
         if (_tiempoFuego >= DuracionFuego)
         {
             _timerFuego.Stop();
-            Modulate = new Color(1, 1, 1); // volver a color normal
+            Modulate = new Color(1, 1, 1);
         }
     }
 
     private void DetectarColisionJugador()
     {
         if (_estaHundiendose) return;
-
         for (int i = 0; i < GetSlideCollisionCount(); i++)
         {
             var collision = GetSlideCollision(i);
-
             if (collision.GetCollider() is Jugador jugador)
             {
-                int daño = Mathf.Max(Vida, 0);
-                jugador.RecibirDmg(daño);
-
-                // Iniciar hundimiento tras golpear al jugador
-                _estaHundiendose = true;
-                GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("disabled", true);
-                GetNode<CollisionShape2D>("CollisionShape2D2").SetDeferred("disabled", true);
-
-                break; // solo se aplica una vez
+                jugador.RecibirDmg(Vida);
+                Hundirse();
+                break;
             }
         }
     }
+    
+
+    public void Limpieza() => QueueFree();
 }
