@@ -37,8 +37,10 @@ public partial class Jugador : CharacterBody2D
 
     public override void _Process(double delta)
     {
-        // Apuntar al ratón
-        _pivoteCañon.LookAt(GetGlobalMousePosition());
+        Vector2 direccion = GetGlobalMousePosition() - _pivoteCañon.GlobalPosition;
+        float anguloEnGrados = Mathf.RadToDeg(direccion.Angle());
+        anguloEnGrados = Mathf.Clamp(anguloEnGrados, -75f, 10f);
+        _pivoteCañon.Rotation = Mathf.DegToRad(anguloEnGrados);
 
         // Atajos de teclado para cambiar munición
         if (Input.IsKeyPressed(Key.Key1)) CambiarMunicion(0);

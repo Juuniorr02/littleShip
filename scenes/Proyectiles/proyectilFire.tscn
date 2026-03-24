@@ -7,13 +7,14 @@
 radius = 4.0
 
 [node name="ProyectilFire" type="RigidBody2D"]
-collision_layer = 0
-collision_mask = 2
+collision_layer = 130
+collision_mask = 130
 contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_dspxu")
 Dmg = 2
 EsDeFuego = true
+DuracionFuego = 3.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1

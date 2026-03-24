@@ -13,8 +13,8 @@ size = Vector2(65, 26)
 size = Vector2(65, 26)
 
 [node name="Jugador" type="CharacterBody2D"]
-light_mask = 3
-visibility_layer = 3
+collision_layer = 125
+collision_mask = 125
 script = ExtResource("1_qi77d")
 EscenasProyectiles = Array[PackedScene]([ExtResource("2_3xsj2"), null, null, null])
 

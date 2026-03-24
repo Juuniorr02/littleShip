@@ -11,11 +11,12 @@ height = 31.396708
 [node name="Enemigo2" type="CharacterBody2D"]
 light_mask = 3
 visibility_layer = 3
-collision_layer = 3
-collision_mask = 3
+collision_layer = 192
+collision_mask = 12
 script = ExtResource("1_qgqek")
 Velocidad = 75.0
 Vida = 10
+FriccionRetroceso = 1.0
 "DañoPorSegundo" = 5
 DuracionFuego = 3.0
 

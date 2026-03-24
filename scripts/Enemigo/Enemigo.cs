@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Godot;
 
 public partial class Enemigo : CharacterBody2D
@@ -30,6 +31,8 @@ public partial class Enemigo : CharacterBody2D
         _timerFuego.OneShot = false;
         _timerFuego.Connect("timeout", new Callable(this, "OnTimerFuegoTimeout"));
         AddChild(_timerFuego);
+
+        Instance = this;
     }
 
     public override void _PhysicsProcess(double delta)
@@ -66,14 +69,12 @@ public partial class Enemigo : CharacterBody2D
         DetectarColisionJugador();
     }
 
-public void AplicarRetroceso(Vector2 fuerza)
-{
-    if (_estaHundiendose) return;
-    
-    // Resetear el retroceso anterior si quieres que el impacto sea seco,
-    // o sumarlo si quieres que varios impactos lo manden muy lejos.
-    _retrocesoActual = fuerza; 
-}
+    public Task AplicarRetroceso(Vector2 fuerza)
+    {
+        if (_estaHundiendose) return Task.CompletedTask;
+        _retrocesoActual = fuerza;
+        return Task.CompletedTask;
+    }
 
 
     public void RecibirDmg(int cantidad)
