@@ -39,7 +39,12 @@ script = ExtResource("3_3xsj2")
 position = Vector2(16, -5)
 
 [node name="PuntoDisparo" type="Marker2D" parent="PivoteCañon"]
-position = Vector2(-1, 1)
+position = Vector2(25, -1)
+
+[node name="LineaTrayectoria" type="Line2D" parent="PivoteCañon/PuntoDisparo"]
+z_index = 30
+points = PackedVector2Array(0, 0)
+default_color = Color(1, 1, 1, 0.26000002)
 
 [node name="Cañon" type="Sprite2D" parent="PivoteCañon"]
 texture_filter = 1

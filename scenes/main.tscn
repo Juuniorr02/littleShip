@@ -29,7 +29,7 @@ scroll_offset = Vector2(2, -7)
 repeat_size = Vector2(1000, 0)
 repeat_times = 3
 script = ExtResource("1_0wfyh")
-VelocidadMar = 100.0
+VelocidadMar = 100.1
 
 [node name="ColorRect" type="ColorRect" parent="Parallax2D"]
 z_index = 2
