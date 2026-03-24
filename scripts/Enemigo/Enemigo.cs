@@ -2,11 +2,11 @@ using Godot;
 
 public partial class Enemigo : CharacterBody2D
 {
-    [Export] public float Velocidad = 100f;
-    [Export] public int Vida = 10;
+    [Export] public float Velocidad;
+    [Export] public int Vida;
     
     private Vector2 _retrocesoActual = Vector2.Zero;
-    [Export] public float FriccionRetroceso = 5f; // Bajada para que el golpe se deslice más
+    [Export] public float FriccionRetroceso; // Bajada para que el golpe se deslice más
 
     private float _yOriginal; 
 
@@ -15,8 +15,8 @@ public partial class Enemigo : CharacterBody2D
     private float _tiempoHundimiento = 0f;
     private float _duracionHundimiento = 2.5f;
 
-    [Export] public int DañoPorSegundo = 5;
-    [Export] public float DuracionFuego = 3f;
+    [Export] public int DañoPorSegundo;
+    [Export] public float DuracionFuego;
     private float _tiempoFuego = 0f;
     private Timer _timerFuego;
     public static Enemigo Instance;
