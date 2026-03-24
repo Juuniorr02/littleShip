@@ -13,6 +13,7 @@ contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_l8r1g")
 Dmg = 2
+EsSonico = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
