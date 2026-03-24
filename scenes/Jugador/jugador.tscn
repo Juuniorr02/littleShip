@@ -1,81 +1,16 @@
-[gd_scene load_steps=17 format=3 uid="uid://cg8k18i4f2mid"]
+[gd_scene load_steps=8 format=3 uid="uid://cg8k18i4f2mid"]
 
 [ext_resource type="Script" uid="uid://bu0xcihon0x63" path="res://scripts/Jugador/Jugador.cs" id="1_qi77d"]
 [ext_resource type="PackedScene" uid="uid://b7n46ikju7id6" path="res://scenes/Proyectiles/proyectilFire.tscn" id="2_3xsj2"]
 [ext_resource type="Script" uid="uid://deile0bv7ogsu" path="res://scripts/Jugador/Flotador.cs" id="3_3xsj2"]
-[ext_resource type="Texture2D" uid="uid://c8i8k4rquvvd" path="res://assets/Barco-Sheet.png" id="3_aoduk"]
+[ext_resource type="Texture2D" uid="uid://cangrw8d826xn" path="res://assets/cañon/Barco-Sheet.png" id="3_q3akq"]
+[ext_resource type="Texture2D" uid="uid://qbhi2tuni5m7" path="res://assets/cañon/Cañom-Sheet.png" id="5_q3akq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q3akq"]
 size = Vector2(65, 26)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3xsj2"]
 size = Vector2(65, 26)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_3xsj2"]
-atlas = ExtResource("3_aoduk")
-region = Rect2(0, 0, 96, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_q3akq"]
-atlas = ExtResource("3_aoduk")
-region = Rect2(96, 0, 96, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xppm3"]
-atlas = ExtResource("3_aoduk")
-region = Rect2(192, 0, 96, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_r4t7w"]
-atlas = ExtResource("3_aoduk")
-region = Rect2(288, 0, 96, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_j00up"]
-atlas = ExtResource("3_aoduk")
-region = Rect2(384, 0, 96, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_dte2m"]
-atlas = ExtResource("3_aoduk")
-region = Rect2(480, 0, 96, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_tk5hs"]
-atlas = ExtResource("3_aoduk")
-region = Rect2(576, 0, 96, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_oobq5"]
-atlas = ExtResource("3_aoduk")
-region = Rect2(672, 0, 96, 64)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_q3akq"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_3xsj2")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_q3akq")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_xppm3")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_r4t7w")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_j00up")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_dte2m")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_tk5hs")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_oobq5")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_xppm3"]
 
 [node name="Jugador" type="CharacterBody2D"]
 light_mask = 3
@@ -87,6 +22,10 @@ EscenasProyectiles = Array[PackedScene]([ExtResource("2_3xsj2"), null, null, nul
 position = Vector2(-2.5, 3)
 shape = SubResource("RectangleShape2D_q3akq")
 
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("3_q3akq")
+
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
@@ -96,12 +35,6 @@ shape = SubResource("RectangleShape2D_3xsj2")
 [node name="Flotador" type="Node" parent="."]
 script = ExtResource("3_3xsj2")
 
-[node name="Jugador" type="AnimatedSprite2D" parent="."]
-light_mask = 3
-visibility_layer = 3
-texture_filter = 1
-sprite_frames = SubResource("SpriteFrames_q3akq")
-
 [node name="PivoteCañon" type="Node2D" parent="."]
 position = Vector2(16, -5)
 
@@ -109,7 +42,7 @@ position = Vector2(16, -5)
 position = Vector2(-1, 1)
 
 [node name="Cañon" type="Sprite2D" parent="PivoteCañon"]
-position = Vector2(9.536743e-07, 2.3841858e-07)
-scale = Vector2(17.5, 6.999999)
-texture = SubResource("PlaceholderTexture2D_xppm3")
+texture_filter = 1
+position = Vector2(9.000001, -1)
+texture = ExtResource("5_q3akq")
 offset = Vector2(0.4714285, -0.07142854)

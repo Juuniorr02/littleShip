@@ -3,30 +3,40 @@ using Godot;
 public partial class Spawner : Node2D
 {
     [Export] public PackedScene EscenaEnemigo;
+    [Export] public PackedScene EscenaEnemigo2;
+
     [Export] public float TiempoSpawn = 2.0f;
+
     private Timer _timer;
+    private RandomNumberGenerator _rng = new RandomNumberGenerator();
 
     public override void _Ready()
     {
         _timer = new Timer();
         AddChild(_timer);
+
         _timer.WaitTime = TiempoSpawn;
         _timer.Timeout += OnSpawnTimerTimeout;
         _timer.Start();
+
+        _rng.Randomize(); // Inicializa el generador aleatorio
     }
 
-	private void OnSpawnTimerTimeout()
-	{
-		var enemigo = EscenaEnemigo.Instantiate<Enemigo>();
-		
-		// Obtenemos la posición Y del jugador (ajustala si quieres que sea un poco más arriba/abajo)
-		// Suponiendo que tienes una referencia al jugador o usas una altura fija:
-		float alturaAgua = 497f; // Cambia este número por la Y donde esté tu barco
-		
-		// Aparece fuera de pantalla a la derecha (X) y a la altura del agua (Y)
-		Vector2 pos = new Vector2(GetViewportRect().Size.X + 100, alturaAgua);
-		
-		enemigo.GlobalPosition = pos;
-		GetTree().Root.AddChild(enemigo);
-	}
+    private void OnSpawnTimerTimeout()
+    {
+        // Elegir enemigo aleatoriamente
+        PackedScene escenaElegida = _rng.RandiRange(0, 1) == 0 
+            ? EscenaEnemigo 
+            : EscenaEnemigo2;
+
+        var enemigo = escenaElegida.Instantiate<Node2D>();
+
+        float alturaAgua = 497f;
+
+        Vector2 pos = new Vector2(GetViewportRect().Size.X + 100, alturaAgua);
+
+        enemigo.GlobalPosition = pos;
+
+        GetTree().Root.AddChild(enemigo);
+    }
 }

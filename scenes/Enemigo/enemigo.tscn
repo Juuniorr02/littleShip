@@ -1,47 +1,44 @@
 [gd_scene load_steps=15 format=3 uid="uid://byaugw6ercdg1"]
 
 [ext_resource type="Script" uid="uid://cnska6k8w7f86" path="res://scripts/Enemigo/Enemigo.cs" id="1_7h2r5"]
-[ext_resource type="Texture2D" uid="uid://c8i8k4rquvvd" path="res://assets/Barco-Sheet.png" id="2_5cx2t"]
 [ext_resource type="Script" uid="uid://deile0bv7ogsu" path="res://scripts/Jugador/Flotador.cs" id="2_upvfi"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_upvfi"]
-atlas = ExtResource("2_5cx2t")
-region = Rect2(0, 0, 96, 64)
+[ext_resource type="Texture2D" uid="uid://b3yben2dbl5ho" path="res://assets/enemigos/Barcoenemigo-Sheet.png" id="3_upvfi"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nuf76"]
-atlas = ExtResource("2_5cx2t")
-region = Rect2(96, 0, 96, 64)
+atlas = ExtResource("3_upvfi")
+region = Rect2(0, 0, 96, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l0i56"]
-atlas = ExtResource("2_5cx2t")
-region = Rect2(192, 0, 96, 64)
+atlas = ExtResource("3_upvfi")
+region = Rect2(96, 0, 96, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_q710g"]
-atlas = ExtResource("2_5cx2t")
-region = Rect2(288, 0, 96, 64)
+atlas = ExtResource("3_upvfi")
+region = Rect2(192, 0, 96, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fmd1a"]
-atlas = ExtResource("2_5cx2t")
-region = Rect2(384, 0, 96, 64)
+atlas = ExtResource("3_upvfi")
+region = Rect2(288, 0, 96, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_u544h"]
-atlas = ExtResource("2_5cx2t")
-region = Rect2(480, 0, 96, 64)
+atlas = ExtResource("3_upvfi")
+region = Rect2(384, 0, 96, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sqmq2"]
-atlas = ExtResource("2_5cx2t")
-region = Rect2(576, 0, 96, 64)
+atlas = ExtResource("3_upvfi")
+region = Rect2(480, 0, 96, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2vl41"]
-atlas = ExtResource("2_5cx2t")
+atlas = ExtResource("3_upvfi")
+region = Rect2(576, 0, 96, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eqivx"]
+atlas = ExtResource("3_upvfi")
 region = Rect2(672, 0, 96, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_eqivx"]
 animations = [{
 "frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_upvfi")
-}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_nuf76")
 }, {
@@ -62,10 +59,13 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_2vl41")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eqivx")
 }],
 "loop": true,
 "name": &"default",
-"speed": 5.0
+"speed": 10.0
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_upvfi"]
@@ -82,7 +82,10 @@ texture_filter = 1
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_7h2r5")
-Vida = 10
+Velocidad = 50.0
+Vida = 20
+"DañoPorSegundo" = 5
+DuracionFuego = 3.0
 
 [node name="Node" type="Node" parent="." groups=["enemigos"]]
 script = ExtResource("2_upvfi")
@@ -92,6 +95,7 @@ texture_filter = 1
 position = Vector2(0, 10)
 scale = Vector2(0.675, 0.675)
 sprite_frames = SubResource("SpriteFrames_eqivx")
+autoplay = "default"
 offset = Vector2(0, -10.37037)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["enemigos"]]

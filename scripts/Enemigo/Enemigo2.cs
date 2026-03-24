@@ -1,11 +1,11 @@
 using Godot;
 
-public partial class Enemigo : CharacterBody2D
+public partial class Enemigo2 : CharacterBody2D
 {
     [Export] public float Velocidad;
     [Export] public int Vida;
 
-    public static Enemigo Instance;
+    public static Enemigo2 Instance;
 
     // Animación de hundimiento
     private bool _estaHundiendose = false;
@@ -73,7 +73,6 @@ public partial class Enemigo : CharacterBody2D
 
             // Desactivar colisiones
             GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("disabled", true);
-            GetNode<CollisionShape2D>("CollisionShape2D2").SetDeferred("disabled", true);
         }
     }
 
@@ -81,9 +80,10 @@ public partial class Enemigo : CharacterBody2D
     {
         foreach (Node nodo in GetTree().Root.GetChildren())
         {
-            if (nodo is Enemigo enemigo)
+
+            if (nodo is Enemigo2 enemigo2)
             {
-                enemigo.QueueFree();
+                enemigo2.QueueFree();
             }
         }
     }
@@ -135,7 +135,6 @@ public partial class Enemigo : CharacterBody2D
                 // Iniciar hundimiento tras golpear al jugador
                 _estaHundiendose = true;
                 GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("disabled", true);
-                GetNode<CollisionShape2D>("CollisionShape2D2").SetDeferred("disabled", true);
 
                 break; // solo se aplica una vez
             }

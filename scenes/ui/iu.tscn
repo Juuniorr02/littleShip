@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://ci612q8twcycd"]
+[gd_scene load_steps=8 format=3 uid="uid://ci612q8twcycd"]
 
 [ext_resource type="Script" uid="uid://br76o48oi8moy" path="res://scripts/IU/Iu.cs" id="1_0grj3"]
 [ext_resource type="Texture2D" uid="uid://bh4olh7oo2trj" path="res://assets/Vidas.png" id="1_qo73p"]
 [ext_resource type="Texture2D" uid="uid://5k30boyry14b" path="res://assets/proyectil/proyectilCannon.png" id="3_s01qv"]
 [ext_resource type="Texture2D" uid="uid://devxxbylt2o2e" path="res://assets/proyectil/ProyectilFire.png" id="4_oogvd"]
 [ext_resource type="Texture2D" uid="uid://84wih0dwqtox" path="res://assets/proyectil/ProyectilRafaga.png" id="5_tyt0d"]
+[ext_resource type="Texture2D" uid="uid://dhh5vt7xs0few" path="res://assets/proyectil/proyectil_sonico.png" id="6_oogvd"]
 
 [sub_resource type="Theme" id="Theme_1nckr"]
 
@@ -67,7 +68,6 @@ theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
 [node name="Stats" type="CenterContainer" parent="IU/IU/IU/Top/Stats/Stats/Stats/Stats/Stats/Stats"]
-modulate = Color(1, 0, 0, 1)
 layout_mode = 2
 
 [node name="Stats" type="VBoxContainer" parent="IU/IU/IU/Top/Stats/Stats/Stats/Stats/Stats/Stats/Stats"]
@@ -274,6 +274,7 @@ theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
 [node name="Flame" type="PanelContainer" parent="IU/IU/IU/Bottom/Towers/Towers/Towers/Towers/Towers/Flame/Flame"]
+self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 
 [node name="Flame" type="MarginContainer" parent="IU/IU/IU/Bottom/Towers/Towers/Towers/Towers/Towers/Flame/Flame/Flame"]
@@ -284,13 +285,14 @@ theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
 [node name="Flame" type="PanelContainer" parent="IU/IU/IU/Bottom/Towers/Towers/Towers/Towers/Towers/Flame/Flame/Flame/Flame"]
+self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 
 [node name="Flame" type="TextureButton" parent="IU/IU/IU/Bottom/Towers/Towers/Towers/Towers/Towers/Flame/Flame/Flame/Flame/Flame"]
 texture_filter = 1
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
+texture_normal = ExtResource("6_oogvd")
+stretch_mode = 0
 
 [node name="Right" type="VBoxContainer" parent="IU/IU/IU/Bottom"]
 layout_mode = 2
