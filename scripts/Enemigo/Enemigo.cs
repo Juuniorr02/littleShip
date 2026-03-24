@@ -1,23 +1,24 @@
-using System.Threading.Tasks;
 using Godot;
 
 public partial class Enemigo : CharacterBody2D
 {
-    [Export] public float Velocidad;
-    [Export] public int Vida;
+    [Export] public float Velocidad = 100f;
+    [Export] public int Vida = 10;
     
     private Vector2 _retrocesoActual = Vector2.Zero;
-    [Export] public float FriccionRetroceso; // Bajada para que el golpe se deslice más
+    [Export] public float FriccionRetroceso = 5f; 
 
     private float _yOriginal; 
 
+    // --- VARIABLES DE HUNDIMIENTO MEJORADAS ---
     private bool _estaHundiendose = false;
-    private float _velocidadHundimiento = 40f;
+    private float _velocidadHundimiento = 60f; // Un poco más rápido para que se note
     private float _tiempoHundimiento = 0f;
-    private float _duracionHundimiento = 2.5f;
+    private float _duracionHundimiento = 3.5f; // Más tiempo para ver la caída
+    private float _rotacionHundimiento; // Para que cada barco se incline distinto
 
-    [Export] public int DañoPorSegundo;
-    [Export] public float DuracionFuego;
+    [Export] public int DañoPorSegundo = 5;
+    [Export] public float DuracionFuego = 3f;
     private float _tiempoFuego = 0f;
     private Timer _timerFuego;
     public static Enemigo Instance;
@@ -31,64 +32,72 @@ public partial class Enemigo : CharacterBody2D
         _timerFuego.OneShot = false;
         _timerFuego.Connect("timeout", new Callable(this, "OnTimerFuegoTimeout"));
         AddChild(_timerFuego);
-
-        Instance = this;
     }
 
     public override void _PhysicsProcess(double delta)
     {
         if (_estaHundiendose)
         {
-            Position += Vector2.Down * _velocidadHundimiento * (float)delta;
-            Rotation += 0.4f * (float)delta;
+            // 1. MOVIMIENTO DE HUNDIMIENTO REALISTA
+            // Ya no usamos Velocity ni MoveAndSlide para que no choque con nada
+            // Simplemente bajamos su posición global
+            GlobalPosition += Vector2.Down * _velocidadHundimiento * (float)delta;
+            
+            // 2. ROTACIÓN (Se inclina hacia un lado como si entrara agua)
+            Rotation += _rotacionHundimiento * (float)delta;
+
+            // 3. DESVANECIMIENTO (Alpha)
             Color c = Modulate;
-            c.A -= 0.5f * (float)delta;
+            c.A -= 0.3f * (float)delta; // Se vuelve transparente poco a poco
             Modulate = c;
 
+            // 4. ELIMINACIÓN FINAL
             _tiempoHundimiento += (float)delta;
-            if (_tiempoHundimiento >= _duracionHundimiento) QueueFree();
-            return;
+            if (_tiempoHundimiento >= _duracionHundimiento) 
+            {
+                QueueFree();
+            }
+            return; // Salimos para que no ejecute la lógica de movimiento normal
         }
 
-        // 1. Movimiento base hacia la IZQUIERDA
+        // --- LÓGICA NORMAL (Mientras está vivo) ---
         Vector2 movimientoBase = Vector2.Left * Velocidad;
-
-        // 2. Fuerza de flotación (Efecto "Muelle")
-        // Esta fuerza solo actúa en el eje Y para devolverlo a su carril
         float diferenciaY = _yOriginal - GlobalPosition.Y;
-        Vector2 fuerzaRetornoY = new Vector2(0, diferenciaY * 4.0f); // 4.0f es la suavidad del retorno
+        Vector2 fuerzaRetornoY = new Vector2(0, diferenciaY * 4.0f);
 
-        // 3. VELOCIDAD FINAL
-        // Sumamos el movimiento constante + el golpe (en cualquier dirección) + la flotación
         Velocity = movimientoBase + _retrocesoActual + fuerzaRetornoY;
-
-        // 4. Aplicamos fricción al retroceso
         _retrocesoActual = _retrocesoActual.Lerp(Vector2.Zero, (float)delta * FriccionRetroceso);
 
         MoveAndSlide();
         DetectarColisionJugador();
     }
 
-    public Task AplicarRetroceso(Vector2 fuerza)
+    private void Hundirse()
     {
-        if (_estaHundiendose) return Task.CompletedTask;
-        _retrocesoActual = fuerza;
-        return Task.CompletedTask;
+        if (_estaHundiendose) return;
+        _estaHundiendose = true;
+
+        // Decidimos aleatoriamente si se inclina a la izquierda o derecha al hundirse
+        _rotacionHundimiento = (float)GD.RandRange(-0.5, 0.5);
+
+        // Desactivamos colisiones para que atraviese el suelo/agua y no estorbe
+        if (HasNode("CollisionShape2D")) GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("disabled", true);
+        if (HasNode("CollisionShape2D2")) GetNode<CollisionShape2D>("CollisionShape2D2").SetDeferred("disabled", true);
+        
+        GD.Print($"El barco {Name} se va al fondo...");
     }
 
+    public void AplicarRetroceso(Vector2 fuerza)
+    {
+        if (_estaHundiendose) return;
+        _retrocesoActual = fuerza; 
+    }
 
     public void RecibirDmg(int cantidad)
     {
         if (_estaHundiendose) return;
         Vida -= cantidad;
         if (Vida <= 0) Hundirse();
-    }
-
-    private void Hundirse()
-    {
-        _estaHundiendose = true;
-        if (HasNode("CollisionShape2D")) GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("disabled", true);
-        if (HasNode("CollisionShape2D2")) GetNode<CollisionShape2D>("CollisionShape2D2").SetDeferred("disabled", true);
     }
 
     public void Quemarse(int dañoPorSegundo, float duracion)
@@ -127,7 +136,6 @@ public partial class Enemigo : CharacterBody2D
             }
         }
     }
-    
 
     public void Limpieza() => QueueFree();
 }
