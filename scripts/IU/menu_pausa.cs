@@ -4,6 +4,8 @@ public partial class menu_pausa : CanvasLayer
 {
     private Button btnGuardarSalir;
     private Button btnVolver;
+    private Button btnReiniciar;
+    private Button btnOpciones  ;
 
     private bool isPaused = false;
 
@@ -11,8 +13,10 @@ public partial class menu_pausa : CanvasLayer
     {
         ProcessMode = ProcessModeEnum.Always;
 
-        btnGuardarSalir = GetNodeOrNull<Button>("CenterContainer/VBoxContainer/guardarsalir");
-        btnVolver = GetNodeOrNull<Button>("CenterContainer/VBoxContainer/volver");
+        btnGuardarSalir = GetNodeOrNull<Button>("PanelContainer/VBoxContainer/guardarsalir");
+        btnVolver = GetNodeOrNull<Button>("PanelContainer/VBoxContainer/volver");
+        btnReiniciar = GetNodeOrNull<Button>("PanelContainer/VBoxContainer/reiniciar");
+        btnOpciones = GetNodeOrNull<Button>("PanelContainer/VBoxContainer/opciones");
 
         ConfigurarBoton(btnGuardarSalir);
         ConfigurarBoton(btnVolver);
@@ -22,6 +26,12 @@ public partial class menu_pausa : CanvasLayer
 
         if (btnVolver != null)
             btnVolver.Pressed += Salir;
+
+        if (btnReiniciar != null)
+            btnReiniciar.Pressed += OnReiniciar;
+
+        if (btnOpciones != null)
+            btnOpciones.Pressed += OnOpciones;
 
         Visible = false;
     }
@@ -69,4 +79,24 @@ public partial class menu_pausa : CanvasLayer
 	{
 		QuitarPausa();
 	}
+
+    private void OnReiniciar()
+    {
+        QuitarPausa();
+        Input.MouseMode = Input.MouseModeEnum.Visible;
+        GetTree().ReloadCurrentScene();
+    }
+
+    private void OnOpciones()
+    {
+        var optionsMenu = GetTree().CurrentScene.GetNodeOrNull<OptionsPausa>("OptionsPausa");
+
+        if (optionsMenu != null)
+        {
+            GD.Print("Abrir menú de opciones");
+
+            optionsMenu.MostrarOpciones(this);
+            Visible = false;
+        }
+    }
 }

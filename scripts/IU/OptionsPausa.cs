@@ -2,8 +2,9 @@ using Godot;
 using System;
 using System.IO;
 
-public partial class OptionsController : Control
+public partial class OptionsPausa : CanvasLayer
 {
+	private menu_pausa pausaMenu;
     private OptionButton resolucionOption;
     private OptionButton modoOption;
     private HSlider volumeOption;
@@ -11,7 +12,7 @@ public partial class OptionsController : Control
     private const string ConfigPath = "user://config.cfg";
     
     // Rutas base
-    private const string BasePath = "CanvasLayer/CenterContainer/PanelContainer/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer";
+    private const string BasePath = "CenterContainer/PanelContainer/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer";
     private const string ResolucionPath = BasePath + "/Resolucion/Resolucion/Resolucion/ResolucionOption";
     private const string ModoPath = BasePath + "/Modo/Modo/Modo/ModoOption";
     private const string VolumenPath = BasePath + "/Volumen/Volumen/Volumen/VolumenOption";
@@ -42,6 +43,8 @@ public partial class OptionsController : Control
 
         // Cargar configuración si existe
         LoadConfig();
+
+		Visible = false;
     }
 
     public override void _UnhandledInput(InputEvent @event)
@@ -50,7 +53,7 @@ public partial class OptionsController : Control
         {
             if (keyEvent.Keycode == Key.Escape)
             {
-                GetTree().ChangeSceneToFile("res://scenes/ui/Menu.tscn");
+                OnBack();
             }
         }
     }
@@ -117,9 +120,12 @@ public partial class OptionsController : Control
     }
 
     private void OnBack()
-    {
-        GetTree().ChangeSceneToFile("res://scenes/ui/Menu.tscn");
-    }
+	{
+    	Visible = false;
+
+    	if (pausaMenu != null)
+        	pausaMenu.Visible = true;
+	}
 
     // Función auxiliar para convertir de 0..1 a decibelios
     private float Linear2Db(float linear)
@@ -198,4 +204,12 @@ public partial class OptionsController : Control
 
         volumeOption.Value = volumen;
     }
+
+	public void MostrarOpciones(menu_pausa menu)
+	{
+    	pausaMenu = menu;
+
+    	Visible = true;
+    	ProcessMode = ProcessModeEnum.Always;
+	}	
 }

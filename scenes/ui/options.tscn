@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bbonqqtv83ufa"]
 
 [ext_resource type="Script" uid="uid://dgvm76x1xqbil" path="res://scripts/IU/OptionsController.cs" id="1_u46ye"]
-[ext_resource type="Texture2D" uid="uid://hv0dmitmsmyo" path="res://assets/fondos/fondo.png" id="2_lr2b1"]
+[ext_resource type="Texture2D" uid="uid://b4hricoibjnm6" path="res://assets/fondos/697f5088-88b8-454b-b123-dcb2f59bc29d.png" id="2_lr2b1"]
 
 [node name="OptionsController" type="Control"]
 layout_mode = 3

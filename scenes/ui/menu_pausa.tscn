@@ -1,36 +1,70 @@
-[gd_scene load_steps=3 format=3 uid="uid://cv0706nbbb2kk"]
+[gd_scene load_steps=7 format=3 uid="uid://cv0706nbbb2kk"]
 
 [ext_resource type="Script" uid="uid://csn4cpbb2rnaa" path="res://scripts/IU/menu_pausa.cs" id="1_8tp32"]
-[ext_resource type="Texture2D" uid="uid://pg684ae5xxf4" path="res://assets/fondos/si5.png" id="2_ipeia"]
+[ext_resource type="Texture2D" uid="uid://djymvi3fedodg" path="res://assets/fondos/continuar.png" id="2_57d5x"]
+[ext_resource type="Texture2D" uid="uid://bwm3ugowbghl7" path="res://assets/fondos/opciones.png" id="3_hp042"]
+[ext_resource type="Texture2D" uid="uid://dc58bmgdm8siy" path="res://assets/fondos/reiniciar.png" id="4_q0fld"]
+[ext_resource type="Texture2D" uid="uid://dp57vf7o1p6wb" path="res://assets/fondos/salir.png" id="5_w6d4c"]
+[ext_resource type="Texture2D" uid="uid://ypnc7wswj6s" path="res://assets/fondos/fondo_pausa.png" id="6_7ho1k"]
 
 [node name="menu_pausa" type="CanvasLayer"]
 layer = 5
 script = ExtResource("1_8tp32")
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
-anchors_preset = 12
-anchor_top = 1.0
+[node name="TextureRect" type="TextureRect" parent="."]
+texture_filter = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -423.0
-offset_bottom = -239.0
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
+texture = ExtResource("6_7ho1k")
+expand_mode = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -217.0
+offset_top = -298.5
+offset_right = 217.0
+offset_bottom = 298.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.7, 0.7)
+pivot_offset = Vector2(200, 550)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="guardarsalir" type="Button" parent="CenterContainer/VBoxContainer"]
-layout_mode = 2
-text = "Volver"
-
-[node name="volver" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="guardarsalir" type="Button" parent="PanelContainer/VBoxContainer"]
 texture_filter = 1
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 6
-icon = ExtResource("2_ipeia")
+icon = ExtResource("2_57d5x")
+flat = true
+
+[node name="opciones" type="Button" parent="PanelContainer/VBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+icon = ExtResource("3_hp042")
+flat = true
+
+[node name="reiniciar" type="Button" parent="PanelContainer/VBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+icon = ExtResource("4_q0fld")
+flat = true
+
+[node name="volver" type="Button" parent="PanelContainer/VBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+icon = ExtResource("5_w6d4c")
 flat = true
 
 [node name="Overlay" type="ColorRect" parent="."]

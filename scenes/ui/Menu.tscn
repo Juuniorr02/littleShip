@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://cmyvny6i4bf0k"]
+[gd_scene load_steps=6 format=3 uid="uid://cmyvny6i4bf0k"]
 
 [ext_resource type="Script" uid="uid://drsgsu746e6kd" path="res://scripts/IU/MenuController.cs" id="1_wblmo"]
-[ext_resource type="Texture2D" uid="uid://hv0dmitmsmyo" path="res://assets/fondos/fondo.png" id="2_vhthp"]
+[ext_resource type="Texture2D" uid="uid://b4hricoibjnm6" path="res://assets/fondos/697f5088-88b8-454b-b123-dcb2f59bc29d.png" id="2_l8juw"]
+[ext_resource type="Texture2D" uid="uid://cqoqvknthfa1i" path="res://assets/fondos/jugar.png" id="3_ngvy7"]
+[ext_resource type="Texture2D" uid="uid://bwm3ugowbghl7" path="res://assets/fondos/opciones.png" id="4_nl0ya"]
+[ext_resource type="Texture2D" uid="uid://dp57vf7o1p6wb" path="res://assets/fondos/salir.png" id="5_b4fr7"]
 
 [node name="Menu" type="CanvasLayer"]
 script = ExtResource("1_wblmo")
@@ -14,18 +17,26 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_vhthp")
+texture = ExtResource("2_l8juw")
 expand_mode = 1
 
 [node name="MenuController" type="Node" parent="."]
 
 [node name="Botones" type="PanelContainer" parent="."]
 self_modulate = Color(1, 1, 1, 0)
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -255.5
+offset_top = -301.0
+offset_right = 255.5
+offset_bottom = 301.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(0.8, 0.8)
+pivot_offset = Vector2(250, 1000)
 
 [node name="Botones" type="VBoxContainer" parent="Botones"]
 layout_mode = 2
@@ -67,9 +78,11 @@ size_flags_vertical = 3
 
 [node name="Jugar" type="Button" parent="Botones/Botones/Botones/Botones/Botones/Jugar"]
 unique_name_in_owner = true
-self_modulate = Color(1, 1, 1, 0)
+texture_filter = 1
 layout_mode = 2
-size_flags_vertical = 3
+icon = ExtResource("3_ngvy7")
+flat = true
+icon_alignment = 1
 
 [node name="MarginContainer2" type="MarginContainer" parent="Botones/Botones/Botones/Botones/Botones"]
 layout_mode = 2
@@ -84,9 +97,12 @@ size_flags_vertical = 3
 
 [node name="Opciones" type="Button" parent="Botones/Botones/Botones/Botones/Botones/Opciones"]
 unique_name_in_owner = true
-self_modulate = Color(1, 1, 1, 0)
+z_index = 6
+texture_filter = 1
 layout_mode = 2
-size_flags_vertical = 3
+icon = ExtResource("4_nl0ya")
+flat = true
+icon_alignment = 1
 
 [node name="MarginContainer3" type="MarginContainer" parent="Botones/Botones/Botones/Botones/Botones"]
 layout_mode = 2
@@ -101,9 +117,12 @@ size_flags_vertical = 3
 
 [node name="Salir" type="Button" parent="Botones/Botones/Botones/Botones/Botones/Salir"]
 unique_name_in_owner = true
-self_modulate = Color(1, 1, 1, 0)
+texture_filter = 1
 layout_mode = 2
 size_flags_vertical = 3
+icon = ExtResource("5_b4fr7")
+flat = true
+icon_alignment = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="Botones/Botones/Botones/Botones/Botones"]
 layout_mode = 2
