@@ -42,26 +42,17 @@ public partial class Iu : Control
         if (cannonSonic != null)
             cannonSonic.Text = _jugador.GetCooldownRestante(3).ToString("F1");
     }
+    public override void _GuiInput(InputEvent @event)
+{
+    if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed)
+    {
+        GetViewport().SetInputAsHandled();
+    }
+}
 
     // Asegúrate de conectar estas funciones a las señales 'pressed' de tus botones en el editor
     public void _on_boton_1_pressed() => _jugador?.CambiarMunicion(0);
     public void _on_boton_2_pressed() => _jugador?.CambiarMunicion(1);
     public void _on_boton_3_pressed() => _jugador?.CambiarMunicion(2);
     public void _on_boton_4_pressed() => _jugador?.CambiarMunicion(3);
-	public void _on_proyectil_pressed() 
-{
-    _jugador?.CambiarMunicion(0); // El 1 es el índice de la bala de fuego
-}
-	public void _on_fire_pressed() 
-{
-    _jugador?.CambiarMunicion(1); // El 1 es el índice de la bala de fuego
-}
-	public void _on_rafaga_pressed() 
-{
-    _jugador?.CambiarMunicion(2); // El 1 es el índice de la bala de fuego
-}
-	public void _on_sonic_pressed() 
-{
-    _jugador?.CambiarMunicion(3); // El 1 es el índice de la bala de fuego
-}
 }

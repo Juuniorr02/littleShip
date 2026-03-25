@@ -33,7 +33,7 @@ public partial class Spawner : Node2D
 
         float alturaAgua = 497f;
 
-        Vector2 pos = new Vector2(GetViewportRect().Size.X + 100, alturaAgua);
+        Vector2 pos = new Vector2(GetViewportRect().Size.X, alturaAgua);
 
         enemigo.GlobalPosition = pos;
 
