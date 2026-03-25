@@ -140,6 +140,7 @@ size_flags_stretch_ratio = 2.0
 [node name="Blank" type="HBoxContainer" parent="IU/IU/IU/Bottom/Towers"]
 layout_mode = 2
 size_flags_vertical = 3
+size_flags_stretch_ratio = 1.2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="IU/IU/IU/Bottom/Towers"]
 layout_mode = 2

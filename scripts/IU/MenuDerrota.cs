@@ -72,9 +72,13 @@ public partial class MenuDerrota : CanvasLayer
 		QuitarPausa();
         Input.MouseMode = Input.MouseModeEnum.Visible;
         Jugador.Instance.Revivir();
-        foreach (Enemigo enemigo in GetTree().GetNodesInGroup("Enemigos"))
+        foreach (Node nodo in GetTree().GetNodesInGroup("Enemigos"))
         {
-            enemigo.Limpieza(); // QueueFree()
+            if (nodo is Enemigo enemigo)
+            enemigo.Limpieza();
+
+            if (nodo is Enemigo2 enemigo2)
+            enemigo2.Limpieza();
         }
     	GD.Print("Reiniciar partida");
     	GetTree().ReloadCurrentScene();

@@ -81,11 +81,21 @@ public partial class menu_pausa : CanvasLayer
 	}
 
     private void OnReiniciar()
-    {
-        QuitarPausa();
+	{
+		QuitarPausa();
         Input.MouseMode = Input.MouseModeEnum.Visible;
-        GetTree().ReloadCurrentScene();
-    }
+        Jugador.Instance.Revivir();
+        foreach (Node nodo in GetTree().GetNodesInGroup("Enemigos"))
+        {
+            if (nodo is Enemigo enemigo)
+            enemigo.Limpieza();
+
+            if (nodo is Enemigo2 enemigo2)
+            enemigo2.Limpieza();
+        }
+    	GD.Print("Reiniciar partida");
+    	GetTree().ReloadCurrentScene();
+	}
 
     private void OnOpciones()
     {
