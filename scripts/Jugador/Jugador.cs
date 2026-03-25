@@ -91,31 +91,31 @@ private void ActualizarVisualizacionTrayectoria()
     _lineaTrayectoria.Visible = true;
     _lineaTrayectoria.ClearPoints();
 
-    // Colocamos el origen de la línea en la punta del cañón
+    // Origen de la línea en la punta del cañón
     _lineaTrayectoria.GlobalPosition = _puntoDisparo.GlobalPosition;
-    _lineaTrayectoria.GlobalRotation = 0; // Importante: la línea no debe rotar, los puntos ya tienen el ángulo
+    _lineaTrayectoria.GlobalRotation = 0; // La línea no rota, los puntos ya tienen dirección
 
-    // 1. Calculamos la fuerza EXACTA (Igual que en ConfigurarBala)
+    // Calculamos la fuerza actual de carga
     float ratio = _currentCharge / ChargeTimeMax;
     float fuerza = Mathf.Lerp(MinForce, MaxForce, ratio);
-    
-    // 2. Usamos el transform global del pivote para la dirección exacta
+
+    // Dirección inicial según el pivote
     Vector2 velocidadInicial = _pivoteCañon.GlobalTransform.X * fuerza;
-    
-    // 3. Obtenemos la gravedad
+
+    // Gravedad
     float gravedad = (float)ProjectSettings.GetSetting("physics/2d/default_gravity");
 
-    // --- DIBUJO DE LA GUÍA ---
-    int numPuntos = 12;        // Aumentamos un poco para ver más camino
-    float pasoTiempo = 0.05f; 
+    // --- Ajustes para que la línea sea más corta ---
+    int numPuntos = 6;        // Menos puntos → línea más corta
+    float pasoTiempo = 0.03f; // Intervalo más pequeño → línea más compacta
 
     for (int i = 0; i < numPuntos; i++)
     {
         float t = i * pasoTiempo;
-        
-        // Ecuación física estándar sin fricción
+
+        // Posición según física 2D sin fricción
         Vector2 puntoLocal = (velocidadInicial * t) + new Vector2(0, 0.5f * gravedad * t * t);
-        
+
         _lineaTrayectoria.AddPoint(puntoLocal);
     }
 }

@@ -23,11 +23,12 @@ scale = Vector2(0.60812473, 0.57687527)
 texture = ExtResource("2_l8r1g")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(3, 0)
 shape = SubResource("CircleShape2D_1dnse")
 debug_color = Color(0.958793, 0.02934609, 0.51187956, 0.41960785)
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
-position = Vector2(6, -7)
+position = Vector2(10, -7)
 rect = Rect2(-10, 3, 8, 7)
 
 [connection signal="body_entered" from="." to="." method="OnBodyEntered"]
